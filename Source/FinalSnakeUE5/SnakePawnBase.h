@@ -44,4 +44,8 @@ private:
 
 	// Declaring private functions
 	void CreateSnakeActor();
+
+	void HandleVerticalInput(float value);
+
+	void HandleHorizontalInput(float value);
 };

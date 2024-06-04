@@ -4,10 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SnakeElementBase.h"
 
 
 #include "SnakeBase.generated.h"
+
+class ASnakeElementBase;
+
+UENUM()
+enum class EMovementDirection
+{
+	UP, 
+	DOWN, 
+	LEFT, 
+	RIGHT
+};
 
 UCLASS()
 class FINALSNAKEUE5_API ASnakeBase : public AActor
@@ -17,6 +27,16 @@ class FINALSNAKEUE5_API ASnakeBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASnakeBase();
+
+	// Setters
+	void SetLastMoveDir(EMovementDirection moveDir);
+
+	// Getters
+	EMovementDirection GetLastMoveDir();
+
+	void SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other);
+
+	void DestroyFullSnakeElements();
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,12 +51,21 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Snake elements")
 	TSubclassOf<ASnakeElementBase> snakeELementClass;
 
+	UPROPERTY(EditDefaultsOnly)
 	float padding;
 
+	UPROPERTY()
 	float stepIn;
 
+	UPROPERTY()
 	TArray<ASnakeElementBase*> snakeElements;
 
+	UPROPERTY()
+	EMovementDirection lastMoveDir;
+
 	// Declaring private functions
-	void CreateSnakeElements(int count = 1);
+
+	void AddSnakeElements(int count = 1);
+
+	void MoveSnake();
 };

@@ -10,13 +10,13 @@ ASnakePawnBase::ASnakePawnBase()
 	PrimaryActorTick.bCanEverTick = true;
 	mainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Snake Camera"));
 	RootComponent = mainCamera;
-	mainCamera->SetWorldRotation(FRotator(-90, 0, 0));
 }
 
 // Called when the game starts or when spawned
 void ASnakePawnBase::BeginPlay()
 {
 	Super::BeginPlay();
+	mainCamera->SetWorldRotation(FRotator(-90, 0, 0));
 	CreateSnakeActor();
 }
 
@@ -32,10 +32,33 @@ void ASnakePawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("Vertical", this, &ASnakePawnBase::HandleVerticalInput);
+	PlayerInputComponent->BindAxis("Horizontal", this, &ASnakePawnBase::HandleHorizontalInput);
+
 }
 
 void ASnakePawnBase::CreateSnakeActor()
 {
 	snakeActor = GetWorld()->SpawnActor<ASnakeBase>(snakeActorClass, FTransform());
+}
+
+void ASnakePawnBase::HandleVerticalInput(float value)
+{
+	if (IsValid(snakeActor)) {
+		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::UP)
+			snakeActor->SetLastMoveDir(EMovementDirection::DOWN);
+		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::DOWN)
+			snakeActor->SetLastMoveDir(EMovementDirection::UP);
+	}
+}
+
+void ASnakePawnBase::HandleHorizontalInput(float value)
+{
+	if (IsValid(snakeActor)) {
+		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT)
+			snakeActor->SetLastMoveDir(EMovementDirection::LEFT);
+		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT)
+			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
+	}
 }
 

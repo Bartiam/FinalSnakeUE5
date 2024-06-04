@@ -4,18 +4,33 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
+#include "Interactable.h"
 
 #include "SnakeElementBase.generated.h"
 
+class UStaticMeshComponent;
+class ASnakeBase;
+
 UCLASS()
-class FINALSNAKEUE5_API ASnakeElementBase : public AActor
+class FINALSNAKEUE5_API ASnakeElementBase : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	ASnakeElementBase();
+
+	// Setters
+	void SetSnakeOwner(ASnakeBase* owner);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetFirstElementMaterial();
+	void SetFirstElementMaterial_Implementation();
+
+	void ToggleCollision();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* meshComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,7 +42,13 @@ public:
 
 private:
 	// Declaring private variables
-	UPROPERTY(EditDefaultsOnly)
-	UStaticMeshComponent* meshComponent;
 
+	ASnakeBase* snakeOwner;
+
+	UFUNCTION()
+	void HandleBeginOverlap(UPrimitiveComponent* OverlappedComp,
+		AActor* other, UPrimitiveComponent* otherComp,
+		int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+
+	virtual void Interact(AActor* interactor, bool bIsHead) override;
 };
