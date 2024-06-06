@@ -16,7 +16,7 @@ ASnakePawnBase::ASnakePawnBase()
 void ASnakePawnBase::BeginPlay()
 {
 	Super::BeginPlay();
-	mainCamera->SetWorldRotation(FRotator(-90, 0, 0));
+	mainCamera->SetWorldRotation(FRotator(-90.f, 0.f, 0.f));
 	CreateSnakeActor();
 }
 
@@ -45,20 +45,32 @@ void ASnakePawnBase::CreateSnakeActor()
 void ASnakePawnBase::HandleVerticalInput(float value)
 {
 	if (IsValid(snakeActor)) {
-		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::UP)
+		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::UP && snakeActor->GetSnakeCanMove())
+		{
 			snakeActor->SetLastMoveDir(EMovementDirection::DOWN);
-		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::DOWN)
+			snakeActor->SetSnakeCanMove(false);
+		}
+		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::DOWN && snakeActor->GetSnakeCanMove())
+		{
 			snakeActor->SetLastMoveDir(EMovementDirection::UP);
+			snakeActor->SetSnakeCanMove(false);
+		}
 	}
 }
 
 void ASnakePawnBase::HandleHorizontalInput(float value)
 {
 	if (IsValid(snakeActor)) {
-		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT)
+		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT && snakeActor->GetSnakeCanMove())
+		{
 			snakeActor->SetLastMoveDir(EMovementDirection::LEFT);
-		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT)
+			snakeActor->SetSnakeCanMove(false);
+		}
+		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT && snakeActor->GetSnakeCanMove())
+		{
 			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
+			snakeActor->SetSnakeCanMove(false);
+		}
 	}
 }
 

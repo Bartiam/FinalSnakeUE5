@@ -13,20 +13,42 @@ ASnakeBase::ASnakeBase()
 	padding = 60.f;
 	lastMoveDir = EMovementDirection::DOWN;
 	stepIn = 0.4f;
+	bSnakeCanMove = true;
 }
 
 // Setters
 void ASnakeBase::SetLastMoveDir(EMovementDirection moveDir)
 { this->lastMoveDir = moveDir; }
 
+void ASnakeBase::SetSnakeCanMove(bool snakeCanMove)
+{ this->bSnakeCanMove = snakeCanMove; }
+
 // Getters
-EMovementDirection ASnakeBase::GetLastMoveDir()
+EMovementDirection ASnakeBase::GetLastMoveDir() const
 { return lastMoveDir; }
+
+bool ASnakeBase::GetSnakeCanMove() const 
+{ return bSnakeCanMove; }
+
+TArray<FVector> ASnakeBase::GetFullSectors() const
+{ return sectors; }
+
+const FVector ASnakeBase::GetOneSector(int index) const
+{
+	return sectors[index];
+}
+
+const int32 ASnakeBase::GetSizeOfSectors() const
+{ return sectors.Num(); }
+
+const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
+{ return snakeElements; }
 
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
+	DivideTheWorldIntoSectors();
 	AddSnakeElements(4);
 	SetActorTickInterval(stepIn);
 }
@@ -42,7 +64,7 @@ void ASnakeBase::AddSnakeElements(int count)
 {
 	for (int i = 0; i < count; ++i)
 	{
-		FVector newLocation(snakeElements.Num() * padding + 30, 30, 40.f);
+		FVector newLocation(snakeElements.Num() * padding + 30, 30, 20.f);
 		ASnakeElementBase* newSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(snakeELementClass, FTransform(newLocation));
 		newSnakeElem->SetActorHiddenInGame(true);
 		newSnakeElem->SetSnakeOwner(this);
@@ -57,6 +79,8 @@ void ASnakeBase::AddSnakeElements(int count)
 
 void ASnakeBase::MoveSnake()
 {
+	bSnakeCanMove = true;
+
 	FVector movementVector(ForceInitToZero);
 
 	switch (lastMoveDir)
@@ -88,6 +112,17 @@ void ASnakeBase::MoveSnake()
 	snakeElements[0]->AddActorWorldOffset(movementVector);
 	snakeElements[0]->SetActorHiddenInGame(false);
 	snakeElements[0]->ToggleCollision();
+}
+
+void ASnakeBase::DivideTheWorldIntoSectors()
+{
+	for (float i = minPositionX; i <= maxPositionX; i += padding)
+	{
+		for (float j = minPositionY; j <= maxPositionY; j += padding)
+		{
+			sectors.Add(FVector(i, j, 20.f));
+		}
+	}
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other)
