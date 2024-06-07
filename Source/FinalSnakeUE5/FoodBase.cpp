@@ -30,11 +30,14 @@ void AFoodBase::Tick(float DeltaTime)
 
 void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 {
-	auto snake = Cast<ASnakeBase>(interactor);
-	if (IsValid(snake))
+	if (IsValid(interactor))
 	{
-		snake->AddSnakeElements();
-		ChangesPlaceOfFood(snake);
+		auto snake = Cast<ASnakeBase>(interactor);
+		if (IsValid(snake))
+		{
+			snake->AddSnakeElements();
+			ChangesPlaceOfFood(snake);
+		}
 	}
 }
 

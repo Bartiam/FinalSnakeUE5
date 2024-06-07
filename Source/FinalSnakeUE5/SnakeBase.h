@@ -47,6 +47,8 @@ public:
 	void DestroyFullSnakeElements();
 
 	void AddSnakeElements(int count = 1);
+
+	void StepBack();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -87,6 +89,8 @@ private:
 
 	UPROPERTY()
 	TArray<FVector> sectors;
+
+	int32 initialSizeSnake;
 	///////////////////////////////
 
 	// Declaring private functions
@@ -94,4 +98,12 @@ private:
 	void MoveSnake();
 
 	void DivideTheWorldIntoSectors();
+
+	UPROPERTY()
+	TArray<FVector> lastPosLastElems;
+
+	UPROPERTY()
+	FVector temp1;
+	UPROPERTY()
+	FVector temp2;
 };

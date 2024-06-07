@@ -47,9 +47,12 @@ void ASnakeElementBase::HandleBeginOverlap(UPrimitiveComponent* OverlappedComp,
 
 void ASnakeElementBase::Interact(AActor* interactor, bool bIsHead)
 {
-	auto snake = Cast<ASnakeBase>(interactor);
-	if (IsValid(snake))
-		snake->DestroyFullSnakeElements();
+	if (IsValid(interactor))
+	{
+		auto snake = Cast<ASnakeBase>(interactor);
+		if (IsValid(snake))
+			snake->DestroyFullSnakeElements();
+	}
 }
 
 

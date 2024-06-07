@@ -14,6 +14,7 @@ ASnakeBase::ASnakeBase()
 	lastMoveDir = EMovementDirection::DOWN;
 	stepIn = 0.4f;
 	bSnakeCanMove = true;
+	initialSizeSnake = 4;
 }
 
 // Setters
@@ -34,9 +35,7 @@ TArray<FVector> ASnakeBase::GetFullSectors() const
 { return sectors; }
 
 const FVector ASnakeBase::GetOneSector(int index) const
-{
-	return sectors[index];
-}
+{ return sectors[index]; }
 
 const int32 ASnakeBase::GetSizeOfSectors() const
 { return sectors.Num(); }
@@ -49,7 +48,7 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
-	AddSnakeElements(4);
+	AddSnakeElements(initialSizeSnake);
 	SetActorTickInterval(stepIn);
 }
 
@@ -77,6 +76,20 @@ void ASnakeBase::AddSnakeElements(int count)
 	}
 }
 
+void ASnakeBase::StepBack()
+{
+	snakeElements[0]->ToggleCollision();
+	for (int i = 0; i <= snakeElements.Num() - 3; i++) {
+		auto currentElem = snakeElements[i];
+		auto nextElem = snakeElements[i + 2];
+		currentElem->SetActorLocation(nextElem->GetActorLocation());
+	}
+	snakeElements[snakeElements.Num() - 1]->SetActorLocation(temp2);
+	snakeElements[snakeElements.Num() - 2]->SetActorLocation(temp1);
+	snakeElements[0]->ToggleCollision();
+}
+
+
 void ASnakeBase::MoveSnake()
 {
 	bSnakeCanMove = true;
@@ -100,6 +113,9 @@ void ASnakeBase::MoveSnake()
 	}
 
 	snakeElements[0]->ToggleCollision();
+	temp2 = temp1;
+	temp1 = snakeElements[snakeElements.Num() - 1]->GetActorLocation();
+
 
 	for (int i = snakeElements.Num() - 1; i > 0; --i)
 	{
