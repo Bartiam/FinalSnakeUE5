@@ -36,11 +36,10 @@ public:
 	// Getters
 	EMovementDirection GetLastMoveDir() const;
 	bool GetSnakeCanMove() const;
-	TArray<FVector> GetFullSectors() const;
-	const FVector GetOneSector(int index) const;
-	const int32 GetSizeOfSectors() const;
 	const TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	//////////
+
+	// Declaring public functions
 
 	void SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other);
 
@@ -49,6 +48,8 @@ public:
 	void AddSnakeElements(int count = 1);
 
 	void StepBack();
+
+	void teleportSnake();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -57,16 +58,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// World Size Variables
-	UPROPERTY(EditDefaultsOnly, Category = "SIZES")
-	float minPositionX;
-	UPROPERTY(EditDefaultsOnly, Category = "SIZES")
-	float minPositionY;
-	UPROPERTY(EditDefaultsOnly, Category = "SIZES")
-	float maxPositionX;
-	UPROPERTY(EditDefaultsOnly, Category = "SIZES")
-	float maxPositionY;
 
 private:
 	// Declaring private variables
@@ -87,9 +78,6 @@ private:
 	UPROPERTY()
 	EMovementDirection lastMoveDir;
 
-	UPROPERTY()
-	TArray<FVector> sectors;
-
 	int32 initialSizeSnake;
 	///////////////////////////////
 
@@ -97,13 +85,8 @@ private:
 
 	void MoveSnake();
 
-	void DivideTheWorldIntoSectors();
-
 	UPROPERTY()
-	TArray<FVector> lastPosLastElems;
-
+	FVector lastPosition;
 	UPROPERTY()
-	FVector temp1;
-	UPROPERTY()
-	FVector temp2;
+	FVector previousLastPosition;
 };

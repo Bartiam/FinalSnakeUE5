@@ -5,6 +5,7 @@
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
 #include "Components/StaticMeshComponent.h"
+#include "GroundBase.h"
 
 // Sets default values
 AFoodBase::AFoodBase()
@@ -13,6 +14,9 @@ AFoodBase::AFoodBase()
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Food"));
 }
+
+void AFoodBase::SetGroundOwner(AGroundBase* owner)
+{ groundOwner = owner; }
 
 // Called when the game starts or when spawned
 void AFoodBase::BeginPlay()
@@ -36,30 +40,7 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			snake->AddSnakeElements();
-			ChangesPlaceOfFood(snake);
+			groundOwner->SpawnFood(snake);
 		}
 	}
 }
-
-void AFoodBase::ChangesPlaceOfFood(const ASnakeBase* snake)
-{
-	if (!IsValid(snake))
-		return;
-
-	auto randomIndex = FMath::RandRange(0, snake->GetSizeOfSectors());
-	auto snakeElements = snake->GetFullSnakeElements();
-	auto currentPosition = snake->GetOneSector(randomIndex);
-
-	for (int i = 0; i < snakeElements.Num(); ++i)
-	{
-		if (currentPosition == snakeElements[i]->GetActorLocation())
-		{
-			i = 0;
-			randomIndex = FMath::RandRange(0, snake->GetSizeOfSectors());
-			currentPosition = snake->GetOneSector(randomIndex);
-		}
-	}
-
-	SetActorLocation(currentPosition);
-}
-

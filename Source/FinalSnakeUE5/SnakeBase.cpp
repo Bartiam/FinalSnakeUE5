@@ -31,15 +31,6 @@ EMovementDirection ASnakeBase::GetLastMoveDir() const
 bool ASnakeBase::GetSnakeCanMove() const 
 { return bSnakeCanMove; }
 
-TArray<FVector> ASnakeBase::GetFullSectors() const
-{ return sectors; }
-
-const FVector ASnakeBase::GetOneSector(int index) const
-{ return sectors[index]; }
-
-const int32 ASnakeBase::GetSizeOfSectors() const
-{ return sectors.Num(); }
-
 const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 { return snakeElements; }
 
@@ -47,7 +38,6 @@ const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	DivideTheWorldIntoSectors();
 	AddSnakeElements(initialSizeSnake);
 	SetActorTickInterval(stepIn);
 }
@@ -84,9 +74,14 @@ void ASnakeBase::StepBack()
 		auto nextElem = snakeElements[i + 2];
 		currentElem->SetActorLocation(nextElem->GetActorLocation());
 	}
-	snakeElements[snakeElements.Num() - 1]->SetActorLocation(temp2);
-	snakeElements[snakeElements.Num() - 2]->SetActorLocation(temp1);
+	snakeElements[snakeElements.Num() - 1]->SetActorLocation(previousLastPosition);
+	snakeElements[snakeElements.Num() - 2]->SetActorLocation(lastPosition);
 	snakeElements[0]->ToggleCollision();
+}
+
+void ASnakeBase::teleportSnake()
+{
+
 }
 
 
@@ -113,8 +108,8 @@ void ASnakeBase::MoveSnake()
 	}
 
 	snakeElements[0]->ToggleCollision();
-	temp2 = temp1;
-	temp1 = snakeElements[snakeElements.Num() - 1]->GetActorLocation();
+	previousLastPosition = lastPosition;
+	lastPosition = snakeElements[snakeElements.Num() - 1]->GetActorLocation();
 
 
 	for (int i = snakeElements.Num() - 1; i > 0; --i)
@@ -128,17 +123,6 @@ void ASnakeBase::MoveSnake()
 	snakeElements[0]->AddActorWorldOffset(movementVector);
 	snakeElements[0]->SetActorHiddenInGame(false);
 	snakeElements[0]->ToggleCollision();
-}
-
-void ASnakeBase::DivideTheWorldIntoSectors()
-{
-	for (float i = minPositionX; i <= maxPositionX; i += padding)
-	{
-		for (float j = minPositionY; j <= maxPositionY; j += padding)
-		{
-			sectors.Add(FVector(i, j, 20.f));
-		}
-	}
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other)

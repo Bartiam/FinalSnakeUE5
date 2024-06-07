@@ -10,6 +10,7 @@
 
 class UStaticMeshComponent;
 class ASnakeBase;
+class AGroundBase;
 
 UCLASS()
 class FINALSNAKEUE5_API AFoodBase : public AActor, public IInteractable
@@ -23,6 +24,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Food")
 	UStaticMeshComponent* meshComponent;
 
+	// Setters
+	void SetGroundOwner(AGroundBase* owner);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -34,5 +38,6 @@ public:
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
 
 private:
-	void ChangesPlaceOfFood(const ASnakeBase* snake);
+	UPROPERTY()
+	AGroundBase* groundOwner;
 };
