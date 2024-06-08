@@ -15,5 +15,17 @@ class FINALSNAKEUE5_API ASoftWallBase : public AWallBase
 	GENERATED_BODY()
 	
 public:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Food")
+	TSubclassOf<class AFoodBase> foodClass;
+
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
+
+private:
+	void SpawnNewFood(const FVector location);
+
+	void DestroySoftWallAndSpawnNewWallBase();
+
+	int8 counter;
 };

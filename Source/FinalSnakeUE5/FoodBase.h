@@ -9,7 +9,6 @@
 #include "FoodBase.generated.h"
 
 class UStaticMeshComponent;
-class ASnakeBase;
 class AGroundBase;
 
 UCLASS()
@@ -27,6 +26,9 @@ public:
 	// Setters
 	void SetGroundOwner(AGroundBase* owner);
 
+	UPROPERTY(EditDefaultsOnly, Category = "Ground owner")
+	AGroundBase* groundOwner;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,7 +39,5 @@ public:
 	
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
 
-private:
-	UPROPERTY()
-	AGroundBase* groundOwner;
+	
 };

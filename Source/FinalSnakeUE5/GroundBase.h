@@ -48,6 +48,8 @@ public:
 	// Declaring public functions
 	void SpawnFood(const ASnakeBase* snake);
 
+	void SpawnWallsDuringGame(const ASnakeBase* snake);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

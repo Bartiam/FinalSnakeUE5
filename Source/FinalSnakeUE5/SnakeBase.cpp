@@ -34,6 +34,9 @@ bool ASnakeBase::GetSnakeCanMove() const
 const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 { return snakeElements; }
 
+const FVector ASnakeBase::GetSnakeElementLocation(int index)
+{ return snakeElements[index]->GetActorLocation(); }
+
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
 {

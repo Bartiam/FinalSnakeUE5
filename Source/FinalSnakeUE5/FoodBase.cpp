@@ -3,7 +3,6 @@
 
 #include "FoodBase.h"
 #include "SnakeBase.h"
-#include "SnakeElementBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "GroundBase.h"
 
@@ -40,6 +39,12 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			snake->AddSnakeElements();
+
+			float chanceWallsAppearing = FMath::FRand();
+			if (chanceWallsAppearing > 0.9f)
+				groundOwner->SpawnWallsDuringGame(snake);
+
+			Destroy();
 			groundOwner->SpawnFood(snake);
 		}
 	}

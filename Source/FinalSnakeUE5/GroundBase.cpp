@@ -53,8 +53,16 @@ void AGroundBase::DivideTheWorldIntoSectors()
 	}
 }
 
+void AGroundBase::SpawnWallsDuringGame(const ASnakeBase* snake)
+{
+
+}
+
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
 {
+	auto newFruit = GetWorld()->SpawnActor<AFoodBase>(foodClass, FTransform());
+	newFruit->SetGroundOwner(this);
+
 	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors());
 	auto snakeElements = snake->GetFullSnakeElements();
 	auto currentPosition = GetOneSector(randomIndex);
@@ -69,6 +77,6 @@ void AGroundBase::SpawnFood(const ASnakeBase* snake)
 		}
 	}
 
-	food->SetActorLocation(currentPosition);
+	newFruit->SetActorLocation(currentPosition);
 }
 
