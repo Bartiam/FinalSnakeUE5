@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FoodFromTheWallBase.h"
+#include "BonusFoodPassageThroughWalls.h"
 #include "SnakeBase.h"
+#include "GroundBase.h"
 
-void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
+void ABonusFoodPassageThroughWalls::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))
 	{
@@ -12,8 +13,6 @@ void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			
-			snake->AddSnakeElements();
-			Destroy();
 		}
 	}
 }

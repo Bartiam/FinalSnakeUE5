@@ -9,6 +9,15 @@
 /**
  * 
  */
+
+UENUM()
+enum class EFoodsEnum
+{
+	GoodFood = 1,
+	BadFood = 2,
+	BonusFood = 3
+};
+
 UCLASS()
 class FINALSNAKEUE5_API ASoftWallBase : public AWallBase
 {
@@ -20,12 +29,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Food")
 	TSubclassOf<class AFoodBase> foodClass;
 
+	UPROPERTY(BlueprintReadWrite)
+	class AGroundBase* groundOwner;
+
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
 
 private:
-	void SpawnNewFood(const FVector location);
-
-	void DestroySoftWallAndSpawnNewWallBase();
-
 	int8 counter;
 };

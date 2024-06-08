@@ -24,6 +24,12 @@ void ASnakeBase::SetLastMoveDir(EMovementDirection moveDir)
 void ASnakeBase::SetSnakeCanMove(bool snakeCanMove)
 { this->bSnakeCanMove = snakeCanMove; }
 
+void ASnakeBase::DeleteSnakeElement()
+{
+	snakeElements[snakeElements.Num() - 1]->Destroy();
+	snakeElements.RemoveAt(snakeElements.Num() - 1);
+}
+
 // Getters
 EMovementDirection ASnakeBase::GetLastMoveDir() const
 { return lastMoveDir; }
@@ -36,6 +42,9 @@ const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 
 const FVector ASnakeBase::GetSnakeElementLocation(int index)
 { return snakeElements[index]->GetActorLocation(); }
+
+const int32 ASnakeBase::GetNumbersOfSnakeElements()
+{ return snakeElements.Num(); }
 
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
@@ -72,7 +81,8 @@ void ASnakeBase::AddSnakeElements(int count)
 void ASnakeBase::StepBack()
 {
 	snakeElements[0]->ToggleCollision();
-	for (int i = 0; i <= snakeElements.Num() - 3; i++) {
+	for (int i = 0; i <= snakeElements.Num() - 3; i++) 
+	{
 		auto currentElem = snakeElements[i];
 		auto nextElem = snakeElements[i + 2];
 		currentElem->SetActorLocation(nextElem->GetActorLocation());
@@ -86,7 +96,6 @@ void ASnakeBase::teleportSnake()
 {
 
 }
-
 
 void ASnakeBase::MoveSnake()
 {

@@ -31,6 +31,7 @@ public:
 	// Setters
 	void SetLastMoveDir(EMovementDirection moveDir);
 	void SetSnakeCanMove(bool snakeCanMove);
+	void DeleteSnakeElement();
 	//////////
 	
 	// Getters
@@ -38,6 +39,7 @@ public:
 	bool GetSnakeCanMove() const;
 	const TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	const FVector GetSnakeElementLocation(int index);
+	const int32 GetNumbersOfSnakeElements();
 	//////////
 
 	// Declaring public functions
@@ -80,6 +82,8 @@ private:
 	EMovementDirection lastMoveDir;
 
 	int32 initialSizeSnake;
+
+	bool bIsPassingThroughWall;
 	///////////////////////////////
 
 	// Declaring private functions

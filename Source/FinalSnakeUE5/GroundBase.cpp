@@ -31,7 +31,7 @@ void AGroundBase::BeginPlay()
 {
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
-	food = GetWorld()->SpawnActor<AFoodBase>(foodClass, FTransform(worldSectors[50]));
+	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(worldSectors[50]));
 	food->SetGroundOwner(this);
 }
 
@@ -53,16 +53,30 @@ void AGroundBase::DivideTheWorldIntoSectors()
 	}
 }
 
-void AGroundBase::SpawnWallsDuringGame(const ASnakeBase* snake)
+void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 {
 
 }
 
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
 {
-	auto newFruit = GetWorld()->SpawnActor<AFoodBase>(foodClass, FTransform());
-	newFruit->SetGroundOwner(this);
+	food->SetActorLocation(RandomValue(snake));
+}
 
+// Functions for softWall
+void AGroundBase::SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index)
+{
+	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomValue(snake)));
+}
+
+void AGroundBase::ChangeSoftWall(const FVector location, const FVector scale)
+{
+	auto newWallBase = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(location));
+	newWallBase->SetActorScale3D(scale);
+}
+
+FVector AGroundBase::RandomValue(const ASnakeBase* snake)
+{
 	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors());
 	auto snakeElements = snake->GetFullSnakeElements();
 	auto currentPosition = GetOneSector(randomIndex);
@@ -77,6 +91,5 @@ void AGroundBase::SpawnFood(const ASnakeBase* snake)
 		}
 	}
 
-	newFruit->SetActorLocation(currentPosition);
+	return currentPosition;
 }
-

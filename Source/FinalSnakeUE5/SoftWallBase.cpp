@@ -4,6 +4,7 @@
 #include "SoftWallBase.h"
 #include "SnakeBase.h"
 #include "FoodBase.h"
+#include "GroundBase.h"
 
 void ASoftWallBase::BeginPlay()
 {
@@ -23,23 +24,24 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 			snake->StepBack();
 			if (counter > 0)
 			{
-				SpawnNewFood(location);
+				float randInt = FMath::RandRange(0.f, 1.f);
+				if (randInt >= 0.5f)
+				{
+					randInt = FMath::RandRange(0.f, 1.f);
+					if (randInt <= 0.33f)
+						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::GoodFood));
+					else if (randInt <= 0.66f)
+						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::BadFood));
+					else 
+						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::BonusFood));
+				}
 				--counter;
 			}
 			else
-				DestroySoftWallAndSpawnNewWallBase();
+			{
+				groundOwner->ChangeSoftWall(GetActorLocation(), GetActorScale3D());
+				Destroy();
+			}
 		}
 	}
-}
-
-void ASoftWallBase::SpawnNewFood(const FVector location)
-{
-	auto newFood = GetWorld()->SpawnActor<AFoodBase>(foodClass, FTransform(location));
-}
-
-void ASoftWallBase::DestroySoftWallAndSpawnNewWallBase()
-{
-	FVector location = GetActorLocation();
-	
-	Destroy();
 }

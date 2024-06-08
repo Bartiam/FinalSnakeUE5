@@ -43,12 +43,20 @@ public:
 	AFoodBase* food;
 
 	UPROPERTY(EditDefaultsOnly, Category = "food")
-	TSubclassOf<AFoodBase> foodClass;
+	TArray<TSubclassOf<AFoodBase>> foodClasses;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Walls")
+	TArray<TSubclassOf<AWallBase>> wallsClasses;
 
 	// Declaring public functions
 	void SpawnFood(const ASnakeBase* snake);
 
-	void SpawnWallsDuringGame(const ASnakeBase* snake);
+	void SpawnWallsAgainstSnake(const ASnakeBase* snake);
+
+	// Functions for softWall
+	void SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index);
+
+	void ChangeSoftWall(const FVector location, const FVector scale);
 
 protected:
 	// Called when the game starts or when spawned
@@ -60,11 +68,11 @@ public:
 
 private:
 	// Declaring private variables
-
 	UPROPERTY()
 	TArray<FVector> worldSectors;
 
 	// Declaring private functions
-
 	void DivideTheWorldIntoSectors();
+
+	FVector RandomValue(const ASnakeBase* snake);
 };

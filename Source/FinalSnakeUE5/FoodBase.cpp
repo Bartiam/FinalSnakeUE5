@@ -42,9 +42,8 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 
 			float chanceWallsAppearing = FMath::FRand();
 			if (chanceWallsAppearing > 0.9f)
-				groundOwner->SpawnWallsDuringGame(snake);
+				groundOwner->SpawnWallsAgainstSnake(snake);
 
-			Destroy();
 			groundOwner->SpawnFood(snake);
 		}
 	}
