@@ -51,9 +51,11 @@ public:
 	// Declaring public functions
 	void SpawnFood(const ASnakeBase* snake);
 
+	void ToggleCollisionWall();
+
 	void SpawnWallsAgainstSnake(const ASnakeBase* snake);
 
-	// Functions for softWall
+		// Functions for softWall
 	void SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index);
 
 	void ChangeSoftWall(const FVector location, const FVector scale);

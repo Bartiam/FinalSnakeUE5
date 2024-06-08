@@ -22,6 +22,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Wall")
 	UStaticMeshComponent* meshComponent;
 
+	UPROPERTY(BlueprintReadWrite)
+	class AGroundBase* groundOwner;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

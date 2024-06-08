@@ -14,9 +14,6 @@ AFoodBase::AFoodBase()
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Food"));
 }
 
-void AFoodBase::SetGroundOwner(AGroundBase* owner)
-{ groundOwner = owner; }
-
 // Called when the game starts or when spawned
 void AFoodBase::BeginPlay()
 {

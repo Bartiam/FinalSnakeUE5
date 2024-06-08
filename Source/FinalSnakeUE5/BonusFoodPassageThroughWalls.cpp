@@ -12,7 +12,8 @@ void ABonusFoodPassageThroughWalls::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			
+			groundOwner->ToggleCollisionWall();
+			Destroy();
 		}
 	}
 }

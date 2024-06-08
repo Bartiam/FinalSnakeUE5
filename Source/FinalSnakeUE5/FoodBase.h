@@ -23,10 +23,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Food")
 	UStaticMeshComponent* meshComponent;
 
-	// Setters
-	void SetGroundOwner(AGroundBase* owner);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ground owner")
+	UPROPERTY(BlueprintReadWrite)
 	AGroundBase* groundOwner;
 
 protected:

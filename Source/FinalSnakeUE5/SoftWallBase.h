@@ -29,9 +29,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Food")
 	TSubclassOf<class AFoodBase> foodClass;
 
-	UPROPERTY(BlueprintReadWrite)
-	class AGroundBase* groundOwner;
-
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
 
 private:

@@ -32,7 +32,7 @@ void AGroundBase::BeginPlay()
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
 	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(worldSectors[50]));
-	food->SetGroundOwner(this);
+	food->groundOwner = this;
 }
 
 // Called every frame
@@ -61,6 +61,11 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
 {
 	food->SetActorLocation(RandomValue(snake));
+}
+
+void AGroundBase::ToggleCollisionWall()
+{
+
 }
 
 // Functions for softWall

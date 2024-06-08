@@ -17,7 +17,6 @@ AWallBase::AWallBase()
 void AWallBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
