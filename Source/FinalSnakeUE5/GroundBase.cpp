@@ -31,7 +31,7 @@ void AGroundBase::BeginPlay()
 {
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
-	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(worldSectors[50]));
+	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(worldSectors[300]));
 	food->groundOwner = this;
 }
 
@@ -40,6 +40,16 @@ void AGroundBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+}
+
+void AGroundBase::FindsSectorsAroundFood()
+{
+	FVector currentPositionOfFood = food->GetActorLocation();
+
+	for (int i = 0; i < currentPositionOfFood.X; i++)
+	{
+
+	}
 }
 
 void AGroundBase::DivideTheWorldIntoSectors()
@@ -53,9 +63,10 @@ void AGroundBase::DivideTheWorldIntoSectors()
 	}
 }
 
-void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
+void AGroundBase::SpawnWallsAgainstSnake(ASnakeBase* snake, const int& numberMovesBeforeFood)
 {
-
+	FindsSectorsAroundFood();
+	snake->SetWallSpawnSwitch(false);
 }
 
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
@@ -69,8 +80,9 @@ void AGroundBase::ToggleCollisionWall()
 }
 
 // Functions for softWall
-void AGroundBase::SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index)
+void AGroundBase::SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index) 
 {
+											//	index = 1 - GoodFood; index = 2 - Badfood; index = 3 - BonusFood;
 	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomValue(snake)));
 }
 
@@ -80,9 +92,9 @@ void AGroundBase::ChangeSoftWall(const FVector location, const FVector scale)
 	newWallBase->SetActorScale3D(scale);
 }
 
-FVector AGroundBase::RandomValue(const ASnakeBase* snake)
+FVector AGroundBase::RandomValue(const ASnakeBase* snake) const
 {
-	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors());
+	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 	auto snakeElements = snake->GetFullSnakeElements();
 	auto currentPosition = GetOneSector(randomIndex);
 
@@ -91,7 +103,7 @@ FVector AGroundBase::RandomValue(const ASnakeBase* snake)
 		if (currentPosition == snakeElements[i]->GetActorLocation())
 		{
 			i = 0;
-			randomIndex = FMath::RandRange(0, GetSizeOfSectors());
+			randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 			currentPosition = GetOneSector(randomIndex);
 		}
 	}

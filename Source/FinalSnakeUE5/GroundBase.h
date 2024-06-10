@@ -53,7 +53,7 @@ public:
 
 	void ToggleCollisionWall();
 
-	void SpawnWallsAgainstSnake(const ASnakeBase* snake);
+	void SpawnWallsAgainstSnake(ASnakeBase* snake, const int& numberMovesBeforeFood);
 
 		// Functions for softWall
 	void SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index);
@@ -73,8 +73,14 @@ private:
 	UPROPERTY()
 	TArray<FVector> worldSectors;
 
+	// Variables and functions for spawn walls
+	UPROPERTY()
+	TArray<FVector> sectorsAroundFood;
+
+	void FindsSectorsAroundFood();
+
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
-	FVector RandomValue(const ASnakeBase* snake);
+	FVector RandomValue(const ASnakeBase* snake) const;
 };

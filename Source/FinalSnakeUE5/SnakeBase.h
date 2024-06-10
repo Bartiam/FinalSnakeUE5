@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-
 #include "SnakeBase.generated.h"
 
 class ASnakeElementBase;
+class AGroundBase;
 
 UENUM()
 enum class EMovementDirection
@@ -32,6 +32,7 @@ public:
 	void SetLastMoveDir(EMovementDirection moveDir);
 	void SetSnakeCanMove(bool snakeCanMove);
 	void DeleteSnakeElement();
+	void SetWallSpawnSwitch(const bool& WallSpawn);
 	//////////
 	
 	// Getters
@@ -40,6 +41,8 @@ public:
 	const TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	const FVector GetSnakeElementLocation(int index);
 	const int32 GetNumbersOfSnakeElements();
+	const float GetPadding() const;
+	const int32 GetNumberMovesBeforeFood() const;
 	//////////
 
 	// Declaring public functions
@@ -53,6 +56,10 @@ public:
 	void StepBack();
 
 	void teleportSnake();
+
+	// Declaring public variebles
+	UPROPERTY(BlueprintReadWrite, Category = "World")
+	AGroundBase* mainWorld;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -86,6 +93,12 @@ private:
 	bool bIsPassingThroughWall;
 	///////////////////////////////
 
+	// Variables and functions for determining the spawn position of the wall
+	bool bWallSpawnSwitch;
+	int32 numberMovesBeforeFood;
+	void CalculatesNumberStepsBeforeFood(const float& foodPosition, const float& snakeHeadPosition);
+	void FindsOutHowManyStepsToFood();
+
 	// Declaring private functions
 
 	void MoveSnake();
@@ -94,4 +107,7 @@ private:
 	FVector lastPosition;
 	UPROPERTY()
 	FVector previousLastPosition;
+
+	FVector LocationNewElement();
+	FVector LocationNewElementMoreOne(const FVector& locationLastElement, const FVector& penultimateElement);
 };

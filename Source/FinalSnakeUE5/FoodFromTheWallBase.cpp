@@ -12,7 +12,7 @@ void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			
-			snake->AddSnakeElements();
+			snake->AddSnakeElements(3);
 			Destroy();
 		}
 	}
