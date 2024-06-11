@@ -42,16 +42,6 @@ void AGroundBase::Tick(float DeltaTime)
 	
 }
 
-void AGroundBase::FindsSectorsAroundFood()
-{
-	FVector currentPositionOfFood = food->GetActorLocation();
-
-	for (int i = 0; i < currentPositionOfFood.X; i++)
-	{
-
-	}
-}
-
 void AGroundBase::DivideTheWorldIntoSectors()
 {
 	for (float i = minPositionX; i <= maxPositionX; i += 60.f)
@@ -65,13 +55,43 @@ void AGroundBase::DivideTheWorldIntoSectors()
 
 void AGroundBase::SpawnWallsAgainstSnake(ASnakeBase* snake, const int& numberMovesBeforeFood)
 {
-	FindsSectorsAroundFood();
-	snake->SetWallSpawnSwitch(false);
+	if (!IsValid(snake))
+		return;
+	FVector snakeHeadPosition = snake->GetFullSnakeElements()[0]->GetActorLocation();
+	float padding = snake->GetPadding();
+
+	if (numberMovesBeforeFood == 5)
+	{
+		if (snake->GetLastMoveDir() == EMovementDirection::UP && snakeHeadPosition.X + (padding * 2) < maxPositionX)
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				FVector newPositionOfWall = FVector(snakeHeadPosition.X + (padding * 2), snakeHeadPosition.Y, 70.f);
+				auto newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(newPositionOfWall));
+			}
+		}
+		else if (snake->GetLastMoveDir() == EMovementDirection::DOWN)
+		{
+
+		}
+		else if (snake->GetLastMoveDir() == EMovementDirection::RIGHT)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+	if (numberMovesBeforeFood == 3)
+		snake->SetWallSpawnSwitch(false);
 }
 
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
 {
-	food->SetActorLocation(RandomValue(snake));
+	if (IsValid(snake))
+		food->SetActorLocation(RandomValue(snake));
 }
 
 void AGroundBase::ToggleCollisionWall()
@@ -82,8 +102,9 @@ void AGroundBase::ToggleCollisionWall()
 // Functions for softWall
 void AGroundBase::SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index) 
 {
+	if (IsValid(snake))
 											//	index = 1 - GoodFood; index = 2 - Badfood; index = 3 - BonusFood;
-	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomValue(snake)));
+		auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomValue(snake)));
 }
 
 void AGroundBase::ChangeSoftWall(const FVector location, const FVector scale)

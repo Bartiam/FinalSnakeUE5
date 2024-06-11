@@ -74,10 +74,9 @@ private:
 	TArray<FVector> worldSectors;
 
 	// Variables and functions for spawn walls
-	UPROPERTY()
-	TArray<FVector> sectorsAroundFood;
 
-	void FindsSectorsAroundFood();
+	UPROPERTY()
+	TArray<AWallBase*> spawnWalls;
 
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();

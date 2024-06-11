@@ -14,9 +14,9 @@ ASnakeBase::ASnakeBase()
 	PrimaryActorTick.bCanEverTick = true;
 	padding = 60.f;
 	lastMoveDir = EMovementDirection::LEFT;
-	stepIn = 0.5f;
+	stepIn = 0.3f;
 	bSnakeCanMove = true;
-	bWallSpawnSwitch = false;
+	bWallSpawnSwitch = true;
 	initialSizeSnake = 4;
 	numberMovesBeforeFood = 0;
 }
@@ -75,7 +75,7 @@ void ASnakeBase::Tick(float DeltaTime)
 	if (bWallSpawnSwitch)
 	{
 		FindsOutHowManyStepsToFood();
-		mainWorld->SpawnWallsAgainstSnake(this);
+		mainWorld->SpawnWallsAgainstSnake(this, numberMovesBeforeFood);
 	}
 }
 
@@ -116,6 +116,8 @@ void ASnakeBase::teleportSnake()
 
 void ASnakeBase::FindsOutHowManyStepsToFood()
 {
+	if (!IsValid(this))
+		return;
 	numberMovesBeforeFood = 0;
 	FVector headSnakeLocation = snakeElements[0]->GetActorLocation();
 	FVector currentPositionOfFood = mainWorld->food->GetActorLocation();
