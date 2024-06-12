@@ -13,7 +13,7 @@ ASnakeBase::ASnakeBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	padding = 60.f;
-	lastMoveDir = EMovementDirection::LEFT;
+	lastMoveDir = EMovementDirection::DOWN;
 	stepIn = 0.2f;
 	bSnakeCanMove = true;
 	initialSizeSnake = 4;
@@ -98,7 +98,8 @@ void ASnakeBase::StepBack()
 
 void ASnakeBase::teleportSnake()
 {
-
+	FVector currentLocationOfPrevHead = snakeElements[1]->GetActorLocation();
+	snakeElements[0]->SetActorLocation(FVector(currentLocationOfPrevHead.X * (-1), currentLocationOfPrevHead.Y * (-1), currentLocationOfPrevHead.Z));
 }
 
 void ASnakeBase::MoveSnake()

@@ -38,10 +38,7 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 				--counter;
 			}
 			else
-			{
-				groundOwner->ChangeSoftWall(GetActorLocation(), GetActorScale3D());
 				Destroy();
-			}
 		}
 	}
 }

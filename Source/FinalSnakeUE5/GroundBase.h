@@ -56,8 +56,6 @@ public:
 	// Functions for softWall
 	void SpawnFoodFromTheSoftWall(const int index);
 
-	void ChangeSoftWall(const FVector location, const FVector scale);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -75,5 +73,7 @@ private:
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
-	FVector RandomValue();
+	FVector RandomPositionOfFood();
+
+	bool CheckPositionsSnakeElementsAndWalls(const TArray<AActor*> elements, FVector currentPosition);
 };
