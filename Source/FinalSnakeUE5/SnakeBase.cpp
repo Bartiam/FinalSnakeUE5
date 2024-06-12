@@ -117,10 +117,10 @@ void ASnakeBase::MoveSnake()
 		movementVector.X -= padding;
 		break;
 	case EMovementDirection::LEFT:
-		movementVector.Y += padding;
+		movementVector.Y -= padding;
 		break;
 	case EMovementDirection::RIGHT:
-		movementVector.Y -= padding;
+		movementVector.Y += padding;
 		break;
 	}
 
@@ -150,7 +150,7 @@ FVector ASnakeBase::LocationNewElement()
 
 	if (GetNumbersOfSnakeElements() == 0)
 	{
-		result = FVector(GetNumbersOfSnakeElements() * padding + 30.f, 30.f, 20.f);
+		result = FVector(GetNumbersOfSnakeElements() * padding + 30.f, 30.f, 30.f);
 	}
 	else
 	{

@@ -53,6 +53,8 @@ public:
 
 	void ToggleCollisionWall();
 
+	void SpawnWallsAgainstSnake(const ASnakeBase* snake);
+
 	// Functions for softWall
 	void SpawnFoodFromTheSoftWall(const int index);
 
@@ -65,6 +67,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Variables and functions dor spawn walls
+
+
 
 	// Declaring private variables
 	UPROPERTY()

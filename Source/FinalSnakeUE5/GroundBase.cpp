@@ -32,6 +32,10 @@ void AGroundBase::BeginPlay()
 {
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
+	for (int i = 0; i < 10; i++)
+	{
+		AFoodBase* newFood = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
+	}
 	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
 	food->groundOwner = this;
 }
@@ -49,7 +53,7 @@ void AGroundBase::DivideTheWorldIntoSectors()
 	{
 		for (float j = minPositionY; j <= maxPositionY; j += 60.f)
 		{
-			worldSectors.Add(FVector(i, j, 20.f));
+			worldSectors.Add(FVector(i, j, 30.f));
 		}
 	}
 }
@@ -62,6 +66,43 @@ void AGroundBase::SpawnFood()
 void AGroundBase::ToggleCollisionWall()
 {
 	
+}
+
+void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
+{
+	FVector currentPositionOfHeadSnake = snake->GetFullSnakeElements()[0]->GetActorLocation();
+	float paddingX = 0, paddingY = 0;
+	EMovementDirection currentDirection = snake->GetLastMoveDir();
+
+	switch (currentDirection)
+	{
+	case EMovementDirection::UP:
+		currentPositionOfHeadSnake.Y -= snake->GetPadding();
+		paddingX = snake->GetPadding();
+		break;
+	case EMovementDirection::DOWN:
+		currentPositionOfHeadSnake.Y -= snake->GetPadding();
+		paddingX = (snake->GetPadding() * -1);
+		break;
+	case EMovementDirection::LEFT:
+		currentPositionOfHeadSnake.X -= snake->GetPadding();
+		paddingY = (snake->GetPadding() * -1);
+		break;
+	case EMovementDirection::RIGHT:
+		currentPositionOfHeadSnake.X -= snake->GetPadding();
+		paddingY = snake->GetPadding();
+		break;
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 3), currentPositionOfHeadSnake.Y + (paddingY * 3), currentPositionOfHeadSnake.Z);
+		auto newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(newPositionOfWall));
+		if (paddingX != 0.f)
+			currentPositionOfHeadSnake.Y += snake->GetPadding();
+		else 
+			currentPositionOfHeadSnake.X += snake->GetPadding();
+	}
 }
 
 // Functions for softWall
@@ -98,8 +139,7 @@ bool AGroundBase::CheckPositionsSnakeElementsAndWalls(const TArray<AActor*> elem
 {
 	for (int i = 0; i < elements.Num(); ++i)
 	{
-		if (elements[i]->GetActorLocation() == currentPosition)
-			return true;
+		
 	}
 
 	return false;

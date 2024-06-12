@@ -61,14 +61,14 @@ void ASnakePawnBase::HandleVerticalInput(float value)
 void ASnakePawnBase::HandleHorizontalInput(float value)
 {
 	if (IsValid(snakeActor)) {
-		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT && snakeActor->GetSnakeCanMove())
-		{
-			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
-			snakeActor->SetSnakeCanMove(false);
-		}
-		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT && snakeActor->GetSnakeCanMove())
+		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT && snakeActor->GetSnakeCanMove())
 		{
 			snakeActor->SetLastMoveDir(EMovementDirection::LEFT);
+			snakeActor->SetSnakeCanMove(false);
+		}
+		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT && snakeActor->GetSnakeCanMove())
+		{
+			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
 			snakeActor->SetSnakeCanMove(false);
 		}
 	}
