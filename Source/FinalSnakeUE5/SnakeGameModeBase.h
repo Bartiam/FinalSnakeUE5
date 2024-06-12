@@ -13,5 +13,5 @@ UCLASS()
 class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 };

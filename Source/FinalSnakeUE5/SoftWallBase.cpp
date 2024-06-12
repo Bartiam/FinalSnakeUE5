@@ -29,11 +29,11 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 				{
 					randInt = FMath::RandRange(0.f, 1.f);
 					if (randInt <= 0.33f)
-						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::GoodFood));
+						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::GoodFood));
 					else if (randInt <= 0.66f)
-						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::BadFood));
+						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BadFood));
 					else 
-						groundOwner->SpawnFoodFromTheSoftWall(snake, int(EFoodsEnum::BonusFood));
+						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BonusFood));
 				}
 				--counter;
 			}

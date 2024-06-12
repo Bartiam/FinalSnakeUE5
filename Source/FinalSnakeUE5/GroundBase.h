@@ -49,14 +49,12 @@ public:
 	TArray<TSubclassOf<AWallBase>> wallsClasses;
 
 	// Declaring public functions
-	void SpawnFood(const ASnakeBase* snake);
+	void SpawnFood();
 
 	void ToggleCollisionWall();
 
-	void SpawnWallsAgainstSnake(ASnakeBase* snake, const int& numberMovesBeforeFood);
-
-		// Functions for softWall
-	void SpawnFoodFromTheSoftWall(const ASnakeBase* snake, const int index);
+	// Functions for softWall
+	void SpawnFoodFromTheSoftWall(const int index);
 
 	void ChangeSoftWall(const FVector location, const FVector scale);
 
@@ -69,17 +67,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+
 	// Declaring private variables
 	UPROPERTY()
 	TArray<FVector> worldSectors;
 
-	// Variables and functions for spawn walls
-
-	UPROPERTY()
-	TArray<AWallBase*> spawnWalls;
-
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
-	FVector RandomValue(const ASnakeBase* snake) const;
+	FVector RandomValue();
 };

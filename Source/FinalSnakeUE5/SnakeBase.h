@@ -32,7 +32,6 @@ public:
 	void SetLastMoveDir(EMovementDirection moveDir);
 	void SetSnakeCanMove(bool snakeCanMove);
 	void DeleteSnakeElement();
-	void SetWallSpawnSwitch(const bool& WallSpawn);
 	//////////
 	
 	// Getters
@@ -42,7 +41,6 @@ public:
 	const FVector GetSnakeElementLocation(int index);
 	const int32 GetNumbersOfSnakeElements();
 	const float GetPadding() const;
-	const int32 GetNumberMovesBeforeFood() const;
 	//////////
 
 	// Declaring public functions
@@ -92,12 +90,6 @@ private:
 
 	bool bIsPassingThroughWall;
 	///////////////////////////////
-
-	// Variables and functions for determining the spawn position of the wall
-	bool bWallSpawnSwitch;
-	int32 numberMovesBeforeFood;
-	void CalculatesNumberStepsBeforeFood(const float& foodPosition, const float& snakeHeadPosition);
-	void FindsOutHowManyStepsToFood();
 
 	// Declaring private functions
 

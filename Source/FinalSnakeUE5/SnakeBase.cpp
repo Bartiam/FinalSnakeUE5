@@ -14,11 +14,9 @@ ASnakeBase::ASnakeBase()
 	PrimaryActorTick.bCanEverTick = true;
 	padding = 60.f;
 	lastMoveDir = EMovementDirection::LEFT;
-	stepIn = 0.3f;
+	stepIn = 0.2f;
 	bSnakeCanMove = true;
-	bWallSpawnSwitch = true;
 	initialSizeSnake = 4;
-	numberMovesBeforeFood = 0;
 }
 
 // Setters
@@ -33,9 +31,6 @@ void ASnakeBase::DeleteSnakeElement()
 	snakeElements[snakeElements.Num() - 1]->Destroy();
 	snakeElements.RemoveAt(snakeElements.Num() - 1);
 }
-
-void ASnakeBase::SetWallSpawnSwitch(const bool& WallSpawn)
-{ this->bWallSpawnSwitch = WallSpawn; }
 
 // Getters
 EMovementDirection ASnakeBase::GetLastMoveDir() const
@@ -56,9 +51,6 @@ const int32 ASnakeBase::GetNumbersOfSnakeElements()
 const float ASnakeBase::GetPadding() const
 { return padding; }
 
-const int32 ASnakeBase::GetNumberMovesBeforeFood() const
-{ return numberMovesBeforeFood; }
-
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
 {
@@ -72,11 +64,6 @@ void ASnakeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	MoveSnake();
-	if (bWallSpawnSwitch)
-	{
-		FindsOutHowManyStepsToFood();
-		mainWorld->SpawnWallsAgainstSnake(this, numberMovesBeforeFood);
-	}
 }
 
 void ASnakeBase::AddSnakeElements(int count)
@@ -112,33 +99,6 @@ void ASnakeBase::StepBack()
 void ASnakeBase::teleportSnake()
 {
 
-}
-
-void ASnakeBase::FindsOutHowManyStepsToFood()
-{
-	if (!IsValid(this))
-		return;
-	numberMovesBeforeFood = 0;
-	FVector headSnakeLocation = snakeElements[0]->GetActorLocation();
-	FVector currentPositionOfFood = mainWorld->food->GetActorLocation();
-
-	CalculatesNumberStepsBeforeFood(currentPositionOfFood.X, headSnakeLocation.X);
-	CalculatesNumberStepsBeforeFood(currentPositionOfFood.Y, headSnakeLocation.Y);
-	numberMovesBeforeFood /= padding;
-}
-
-void ASnakeBase::CalculatesNumberStepsBeforeFood(const float& foodPosition, const float& snakeHeadPosition)
-{
-	if (foodPosition < snakeHeadPosition)
-	{
-		for (int i = foodPosition; i < snakeHeadPosition; i += 60)
-			numberMovesBeforeFood += padding;
-	}
-	else
-	{
-		for (int i = snakeHeadPosition; i < foodPosition; i += 60)
-			numberMovesBeforeFood += padding;
-	}
 }
 
 void ASnakeBase::MoveSnake()
