@@ -45,7 +45,7 @@ const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 const FVector ASnakeBase::GetSnakeElementLocation(int index)
 { return snakeElements[index]->GetActorLocation(); }
 
-const int32 ASnakeBase::GetNumbersOfSnakeElements()
+int32 ASnakeBase::GetNumbersOfSnakeElements()
 { return snakeElements.Num(); }
 
 const float ASnakeBase::GetPadding() const

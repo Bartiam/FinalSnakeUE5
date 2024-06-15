@@ -15,6 +15,8 @@ AGroundBase::AGroundBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ground"));
+	RootComponent = meshComponent;
+	countSnakeElementsForBonusLevel = 50;
 }
 
 // Getters
@@ -32,10 +34,6 @@ void AGroundBase::BeginPlay()
 {
 	Super::BeginPlay();
 	DivideTheWorldIntoSectors();
-	for (int i = 0; i < 10; i++)
-	{
-		AFoodBase* newFood = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
-	}
 	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
 	food->groundOwner = this;
 }
@@ -96,17 +94,36 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 
 	for (int i = 0; i < 3; ++i)
 	{
+		float wallLungeChance = FMath::RandRange(0.f, 1.f);
+		int indexOfWall;
+		if (wallLungeChance > 0.3f)
+			indexOfWall = 0;
+		else
+			indexOfWall = 1;
+
+		if (snake->GetFullSnakeElements().Num() == countSnakeElementsForBonusLevel)
+		{
+			countSnakeElementsForBonusLevel += 50;
+			indexOfWall = 2;
+		}
 		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 3), currentPositionOfHeadSnake.Y + (paddingY * 3), currentPositionOfHeadSnake.Z);
-		auto newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(newPositionOfWall));
-		if (paddingX != 0.f)
-			currentPositionOfHeadSnake.Y += snake->GetPadding();
-		else 
-			currentPositionOfHeadSnake.X += snake->GetPadding();
+		if (newPositionOfWall.X >= minPositionX && newPositionOfWall.X <= maxPositionX &&
+			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY)
+		{
+			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
+			FTimerHandle tymerDelay;
+			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 5, false);
+			wallsOnTheGround.Add(newWall);
+			if (paddingX != 0.f)
+				currentPositionOfHeadSnake.Y += snake->GetPadding();
+			else 
+				currentPositionOfHeadSnake.X += snake->GetPadding();
+		}
 	}
 }
 
 // Functions for softWall
-void AGroundBase::SpawnFoodFromTheSoftWall(const int index) 
+void AGroundBase::SpawnFoodFromTheSoftWall(const int index)
 {
 										//	index = 1 - GoodFood; index = 2 - Badfood; index = 3 - BonusFood;
 	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomPositionOfFood()));
@@ -114,19 +131,12 @@ void AGroundBase::SpawnFoodFromTheSoftWall(const int index)
 
 FVector AGroundBase::RandomPositionOfFood()
 {
-	TArray<AActor*> snakeElements;
-	TArray<AActor*> walls;
-
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AWallBase::StaticClass(), walls);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASnakeElementBase::StaticClass(), snakeElements);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASnakeElementBase::StaticClass(), snakeElementsFromWorld);
 
 	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 	auto currentPosition = GetOneSector(randomIndex);
 
-	
-
-	while (CheckPositionsSnakeElementsAndWalls(snakeElements, currentPosition) ||
-			CheckPositionsSnakeElementsAndWalls(walls, currentPosition))
+	while (CheckPositionsSnakeElementsAndWalls(currentPosition))
 	{
 		randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 		currentPosition = GetOneSector(randomIndex);
@@ -135,12 +145,31 @@ FVector AGroundBase::RandomPositionOfFood()
 	return currentPosition;
 }
 
-bool AGroundBase::CheckPositionsSnakeElementsAndWalls(const TArray<AActor*> elements, FVector currentPosition)
+bool AGroundBase::CheckPositionsSnakeElementsAndWalls(FVector currentPosition)
 {
-	for (int i = 0; i < elements.Num(); ++i)
+	for (int i = 0; i < snakeElementsFromWorld.Num(); ++i)
 	{
-		
+		if (currentPosition == snakeElementsFromWorld[i]->GetActorLocation())
+			return true;
+	}
+
+	if (!(wallsOnTheGround.IsEmpty()))
+	{
+		for (int i = 0; i < wallsOnTheGround.Num(); ++i)
+		{
+			if (currentPosition == wallsOnTheGround[i]->GetActorLocation())
+				return true;
+		}
 	}
 
 	return false;
+}
+
+void AGroundBase::DestroyWalls()
+{
+	for (int i = 0; i < wallsOnTheGround.Num();)
+	{
+		wallsOnTheGround[i]->Destroy();
+		wallsOnTheGround.RemoveAt(i);
+	}
 }

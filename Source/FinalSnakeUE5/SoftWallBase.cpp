@@ -24,13 +24,13 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 			snake->StepBack();
 			if (counter > 0)
 			{
-				float randInt = FMath::RandRange(0.f, 1.f);
-				if (randInt >= 0.5f)
+				float foodLungeChance = FMath::RandRange(0.f, 1.f);
+				if (foodLungeChance >= 0.5f)
 				{
-					randInt = FMath::RandRange(0.f, 1.f);
-					if (randInt <= 0.33f)
+					foodLungeChance = FMath::RandRange(0.f, 1.f);
+					if (foodLungeChance <= 0.50f)
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::GoodFood));
-					else if (randInt <= 0.66f)
+					else if (foodLungeChance <= 0.66f)
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BadFood));
 					else 
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BonusFood));

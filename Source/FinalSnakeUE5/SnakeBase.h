@@ -39,7 +39,7 @@ public:
 	bool GetSnakeCanMove() const;
 	const TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	const FVector GetSnakeElementLocation(int index);
-	const int32 GetNumbersOfSnakeElements();
+	int32 GetNumbersOfSnakeElements();
 	const float GetPadding() const;
 	//////////
 

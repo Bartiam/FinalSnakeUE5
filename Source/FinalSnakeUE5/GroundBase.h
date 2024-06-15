@@ -67,18 +67,25 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	// Variables and functions dor spawn walls
-
 
 
 	// Declaring private variables
 	UPROPERTY()
 	TArray<FVector> worldSectors;
 
+	UPROPERTY()
+	TArray<AActor*> snakeElementsFromWorld;
+
+	TArray<AWallBase*> wallsOnTheGround;
+
+	int32 countSnakeElementsForBonusLevel;
+
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
 	FVector RandomPositionOfFood();
 
-	bool CheckPositionsSnakeElementsAndWalls(const TArray<AActor*> elements, FVector currentPosition);
+	bool CheckPositionsSnakeElementsAndWalls(FVector currentPosition);
+
+	void DestroyWalls();
 };
