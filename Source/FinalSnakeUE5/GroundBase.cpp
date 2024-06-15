@@ -33,6 +33,7 @@ const int32 AGroundBase::GetSizeOfSectors() const
 void AGroundBase::BeginPlay()
 {
 	Super::BeginPlay();
+	SpawnWallBeginPlay();
 	DivideTheWorldIntoSectors();
 	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
 	food->groundOwner = this;
@@ -51,8 +52,18 @@ void AGroundBase::DivideTheWorldIntoSectors()
 	{
 		for (float j = minPositionY; j <= maxPositionY; j += 60.f)
 		{
-			worldSectors.Add(FVector(i, j, 30.f));
+			if (!(CheckWallsInTheWorld(FVector(i, j, 30.f))))
+				worldSectors.Add(FVector(i, j, 30.f));
 		}
+	}
+}
+
+void AGroundBase::SpawnWallBeginPlay()
+{
+	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
+	{
+		auto newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(locationsOfWallToBeginPlay[i]));
+		wallsToSpawnBeginPlay.Add(newWall);
 	}
 }
 
@@ -63,7 +74,23 @@ void AGroundBase::SpawnFood()
 
 void AGroundBase::ToggleCollisionWall()
 {
-	
+	if (!(wallsOnTheGround.IsEmpty()))
+	{
+		for (int i = 0; i < wallsOnTheGround.Num(); ++i)
+		{
+			for (int j = 0; j < wallsOnTheGround[i].Num(); ++j)
+			{
+				if (wallsOnTheGround[i][j]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+					wallsOnTheGround[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+				else
+				{
+					wallsOnTheGround[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+					FTimerHandle timerDelay;
+					GetWorldTimerManager().SetTimer(timerDelay, this, &AGroundBase::ToggleCollisionWall, 5, false);
+				}
+			}
+		}
+	}
 }
 
 void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
@@ -92,6 +119,8 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 		break;
 	}
 
+	TArray<AWallBase*> tempWallsForAdd;
+
 	for (int i = 0; i < 3; ++i)
 	{
 		float wallLungeChance = FMath::RandRange(0.f, 1.f);
@@ -108,18 +137,20 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 		}
 		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 3), currentPositionOfHeadSnake.Y + (paddingY * 3), currentPositionOfHeadSnake.Z);
 		if (newPositionOfWall.X >= minPositionX && newPositionOfWall.X <= maxPositionX &&
-			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY)
+			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY && 
+			newPositionOfWall != food->GetActorLocation())
 		{
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
+			tempWallsForAdd.Add(newWall);
 			FTimerHandle tymerDelay;
-			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 5, false);
-			wallsOnTheGround.Add(newWall);
+			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 30, false);
 			if (paddingX != 0.f)
 				currentPositionOfHeadSnake.Y += snake->GetPadding();
 			else 
 				currentPositionOfHeadSnake.X += snake->GetPadding();
 		}
 	}
+	wallsOnTheGround.Add(tempWallsForAdd);
 }
 
 // Functions for softWall
@@ -145,6 +176,17 @@ FVector AGroundBase::RandomPositionOfFood()
 	return currentPosition;
 }
 
+bool AGroundBase::CheckWallsInTheWorld(const FVector& currentSector)
+{
+	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
+	{
+		if (locationsOfWallToBeginPlay[i] == currentSector)
+			return true;
+	}
+
+	return false;
+}
+
 bool AGroundBase::CheckPositionsSnakeElementsAndWalls(FVector currentPosition)
 {
 	for (int i = 0; i < snakeElementsFromWorld.Num(); ++i)
@@ -153,23 +195,15 @@ bool AGroundBase::CheckPositionsSnakeElementsAndWalls(FVector currentPosition)
 			return true;
 	}
 
-	if (!(wallsOnTheGround.IsEmpty()))
-	{
-		for (int i = 0; i < wallsOnTheGround.Num(); ++i)
-		{
-			if (currentPosition == wallsOnTheGround[i]->GetActorLocation())
-				return true;
-		}
-	}
-
 	return false;
+}
+
+void AGroundBase::ChangeOneSoftWall(AWallBase* wall)
+{
+	
 }
 
 void AGroundBase::DestroyWalls()
 {
-	for (int i = 0; i < wallsOnTheGround.Num();)
-	{
-		wallsOnTheGround[i]->Destroy();
-		wallsOnTheGround.RemoveAt(i);
-	}
+
 }

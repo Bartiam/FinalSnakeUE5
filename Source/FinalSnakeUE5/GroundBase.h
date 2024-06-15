@@ -55,6 +55,8 @@ public:
 
 	void SpawnWallsAgainstSnake(const ASnakeBase* snake);
 
+	void ChangeOneSoftWall(AWallBase* wall);
+
 	// Functions for softWall
 	void SpawnFoodFromTheSoftWall(const int index);
 
@@ -76,14 +78,24 @@ private:
 	UPROPERTY()
 	TArray<AActor*> snakeElementsFromWorld;
 
-	TArray<AWallBase*> wallsOnTheGround;
+	TArray<TArray<AWallBase*>> wallsOnTheGround;
+
+	TArray<AWallBase*> wallsToSpawnBeginPlay;
+
+	// Variables for spawn wall in begin play
+	UPROPERTY(EditDefaultsOnly, Category = "Location Wall")
+	TArray<FVector> locationsOfWallToBeginPlay;
 
 	int32 countSnakeElementsForBonusLevel;
 
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
+	void SpawnWallBeginPlay();
+
 	FVector RandomPositionOfFood();
+
+	bool CheckWallsInTheWorld(const FVector& currentSector);
 
 	bool CheckPositionsSnakeElementsAndWalls(FVector currentPosition);
 

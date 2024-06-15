@@ -28,17 +28,17 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 				if (foodLungeChance >= 0.5f)
 				{
 					foodLungeChance = FMath::RandRange(0.f, 1.f);
-					if (foodLungeChance <= 0.50f)
+					if (foodLungeChance <= 0.5f)
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::GoodFood));
-					else if (foodLungeChance <= 0.66f)
+					else if (foodLungeChance > 0.5f && foodLungeChance < 0.8f)
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BadFood));
-					else 
+					else
 						groundOwner->SpawnFoodFromTheSoftWall(int(EFoodsEnum::BonusFood));
 				}
 				--counter;
 			}
 			else
-				Destroy();
+				groundOwner->ChangeOneSoftWall(this);
 		}
 	}
 }

@@ -40,7 +40,7 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 
 			float checkChanceForSpawnWallsAgainsSnake = FMath::RandRange(0.f, 1.f);
 
-			if (checkChanceForSpawnWallsAgainsSnake >= 0.5f)
+			if (checkChanceForSpawnWallsAgainsSnake >= 0.3f)
 				groundOwner->SpawnWallsAgainstSnake(snake);
 		}
 	}
