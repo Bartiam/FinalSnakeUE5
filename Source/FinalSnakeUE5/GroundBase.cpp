@@ -153,22 +153,27 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 			countSnakeElementsForBonusLevel += 50;
 			indexOfWall = 2;
 		}
+
 		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 2), currentPositionOfHeadSnake.Y + (paddingY * 2), currentPositionOfHeadSnake.Z);
+
 		if (newPositionOfWall.X >= minPositionX && newPositionOfWall.X <= maxPositionX &&
 			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY && 
 			newPositionOfWall != food->GetActorLocation() && CheckPositionsWallBeginPlay(newPositionOfWall))
 		{
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
 			tempWallsForAdd.Add(newWall);
-			FTimerHandle tymerDelay;
-			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 20, false);
-			if (paddingX != 0.f)
-				currentPositionOfHeadSnake.Y += snake->GetPadding();
-			else 
-				currentPositionOfHeadSnake.X += snake->GetPadding();
 		}
+
+		if (paddingX != 0.f)
+			currentPositionOfHeadSnake.Y += snake->GetPadding();
+		else
+			currentPositionOfHeadSnake.X += snake->GetPadding();
 	}
 	wallsToSpawnAgainstSnake.Add(tempWallsForAdd);
+	CheckingArrayForNull();
+
+	FTimerHandle tymerDelay;
+	GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 20, false);
 }
 
 // Functions for softWall
@@ -241,12 +246,12 @@ void AGroundBase::SoftWallDestroy(AWallBase* wall)
 	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
 	{
 		wallsToSpawnAgainstSnake[i].RemoveSingle(wall);
-		if (wallsToSpawnAgainstSnake[i].IsEmpty())
-			wallsToSpawnAgainstSnake.RemoveAt(i);
 	}
 
 	wallsToSpawnBeginPlay.RemoveSingle(wall);
 	wall->Destroy();
+
+	CheckingArrayForNull();
 }
 
 void AGroundBase::DestroyWalls()
