@@ -91,13 +91,23 @@ void AGroundBase::ToggleCollisionWall()
 				if (wallsToSpawnAgainstSnake[i][j]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
 					wallsToSpawnAgainstSnake[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 				else
-				{
 					wallsToSpawnAgainstSnake[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-					FTimerHandle timerDelay;
-					GetWorldTimerManager().SetTimer(timerDelay, this, &AGroundBase::ToggleCollisionWall, 5, false);
-				}
 			}
 		}
+	}
+
+	for (int i = 0; i < wallsToSpawnBeginPlay.Num(); ++i)
+	{
+		if (wallsToSpawnBeginPlay[i]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+			wallsToSpawnBeginPlay[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		else
+			wallsToSpawnBeginPlay[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+	{
+		FTimerHandle timerDelay;
+		GetWorldTimerManager().SetTimer(timerDelay, this, &AGroundBase::ToggleCollisionWall, 5, false);
 	}
 }
 
@@ -151,7 +161,7 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
 			tempWallsForAdd.Add(newWall);
 			FTimerHandle tymerDelay;
-			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 5, false);
+			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 20, false);
 			if (paddingX != 0.f)
 				currentPositionOfHeadSnake.Y += snake->GetPadding();
 			else 
