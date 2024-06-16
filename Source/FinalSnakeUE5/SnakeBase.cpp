@@ -14,7 +14,7 @@ ASnakeBase::ASnakeBase()
 	PrimaryActorTick.bCanEverTick = true;
 	padding = 60.f;
 	lastMoveDir = EMovementDirection::DOWN;
-	stepIn = 0.2f;
+	currentStepIn = initialStepIn;
 	bSnakeCanMove = true;
 	initialSizeSnake = 4;
 }
@@ -56,7 +56,7 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	AddSnakeElements(initialSizeSnake);
-	SetActorTickInterval(stepIn);
+	SetActorTickInterval(currentStepIn);
 }
 
 // Called every frame
@@ -100,6 +100,42 @@ void ASnakeBase::teleportSnake()
 {
 	FVector currentLocationOfPrevHead = snakeElements[1]->GetActorLocation();
 	snakeElements[0]->SetActorLocation(FVector(currentLocationOfPrevHead.X * (-1), currentLocationOfPrevHead.Y * (-1), currentLocationOfPrevHead.Z));
+}
+
+void ASnakeBase::SlowDownSnake()
+{
+	if (currentStepIn == minSpeedStepIn)
+		return;
+
+	currentStepIn += 0.05f;
+	recentSpeedChanges = 0.05f;
+	SetActorTickInterval(currentStepIn);
+
+	FTimerHandle timerDelay;
+	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, 5, false);
+}
+
+void ASnakeBase::SpeedUpSnake()
+{
+	if (currentStepIn == maxSpeedStepIn)
+		return;
+
+	currentStepIn -= 0.05f;
+	recentSpeedChanges = -0.05f;
+	SetActorTickInterval(currentStepIn);
+
+	FTimerHandle timerDelay;
+	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, 5, false);
+}
+
+void ASnakeBase::CancellationBonus()
+{
+	if (recentSpeedChanges < 0.0f)
+		currentStepIn += 0.05f;
+	else
+		currentStepIn -= 0.05f;
+
+	SetActorTickInterval(currentStepIn);
 }
 
 void ASnakeBase::MoveSnake()

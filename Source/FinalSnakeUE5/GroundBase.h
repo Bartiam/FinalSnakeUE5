@@ -57,8 +57,7 @@ public:
 
 	void SoftWallDestroy(AWallBase* wall);
 
-	// Functions for softWall
-	void SpawnFoodFromTheSoftWall(const int index);
+	void BonusFoodSpawn(const int& typeOfFood);
 
 protected:
 	// Called when the game starts or when spawned

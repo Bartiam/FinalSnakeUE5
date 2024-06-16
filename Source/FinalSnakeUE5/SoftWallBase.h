@@ -10,14 +10,6 @@
  * 
  */
 
-UENUM()
-enum class EFoodsEnum
-{
-	GoodFood = 1,
-	BadFood = 2,
-	BonusFood = 3
-};
-
 UCLASS()
 class FINALSNAKEUE5_API ASoftWallBase : public AWallBase
 {

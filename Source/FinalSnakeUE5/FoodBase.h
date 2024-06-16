@@ -11,6 +11,16 @@
 class UStaticMeshComponent;
 class AGroundBase;
 
+UENUM()
+enum class EFoodsEnum
+{
+	SimpleFood = 1,
+	BadFood,
+	BonusFoodFromTheSoftWall,
+	BonusFoodAcceliration,
+	BonusFoodDeceleration
+};
+
 UCLASS()
 class FINALSNAKEUE5_API AFoodBase : public AActor, public IInteractable
 {

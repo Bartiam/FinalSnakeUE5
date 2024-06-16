@@ -55,6 +55,10 @@ public:
 
 	void teleportSnake();
 
+	void SlowDownSnake();
+
+	void SpeedUpSnake();
+
 	// Declaring public variebles
 	UPROPERTY(BlueprintReadWrite, Category = "World")
 	AGroundBase* mainWorld;
@@ -75,15 +79,21 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float padding;
 
-	UPROPERTY()
-	float stepIn;
+	const float initialStepIn = 0.2f;
+
+	float currentStepIn;
+
+	const float maxSpeedStepIn = 0.1f;
+
+	const float minSpeedStepIn = 0.3f;
+
+	float recentSpeedChanges;
 
 	bool bSnakeCanMove;
 
 	UPROPERTY()
 	TArray<ASnakeElementBase*> snakeElements;
 
-	UPROPERTY()
 	EMovementDirection lastMoveDir;
 
 	int32 initialSizeSnake;
@@ -92,6 +102,8 @@ private:
 	///////////////////////////////
 
 	// Declaring private functions
+
+	void CancellationBonus();
 
 	void MoveSnake();
 

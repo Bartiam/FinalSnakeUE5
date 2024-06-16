@@ -176,11 +176,9 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 	GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 20, false);
 }
 
-// Functions for softWall
-void AGroundBase::SpawnFoodFromTheSoftWall(const int index)
+void AGroundBase::BonusFoodSpawn(const int& typeOfFood)
 {
-										//	index = 1 - GoodFood; index = 2 - Badfood; index = 3 - BonusFood;
-	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[index], FTransform(RandomPositionOfFood()));
+	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[typeOfFood], FTransform(RandomPositionOfFood()));
 }
 
 FVector AGroundBase::RandomPositionOfFood()
