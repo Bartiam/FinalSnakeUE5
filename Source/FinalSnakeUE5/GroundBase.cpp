@@ -62,7 +62,15 @@ void AGroundBase::SpawnWallBeginPlay()
 {
 	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
 	{
-		auto newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(locationsOfWallToBeginPlay[i]));
+		AWallBase* newWall;
+		if (locationsOfWallToBeginPlay[i].X == -330.f && locationsOfWallToBeginPlay[i].Y >= -90.f && locationsOfWallToBeginPlay[i].Y <= 90.f)
+			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(locationsOfWallToBeginPlay[i]));
+		else if (locationsOfWallToBeginPlay[i].Y == -690.f && locationsOfWallToBeginPlay[i].X <= 510.f && locationsOfWallToBeginPlay[i].X >= 390.f)
+			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(locationsOfWallToBeginPlay[i]));
+		else if (locationsOfWallToBeginPlay[i].Y == 690.f && locationsOfWallToBeginPlay[i].X <= -390.f && locationsOfWallToBeginPlay[i].X >= -510.f)
+			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(locationsOfWallToBeginPlay[i]));
+		else
+			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(locationsOfWallToBeginPlay[i]));
 		wallsToSpawnBeginPlay.Add(newWall);
 	}
 }
