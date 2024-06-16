@@ -82,17 +82,17 @@ void AGroundBase::SpawnFood()
 
 void AGroundBase::ToggleCollisionWall()
 {
-	if (!(wallsOnTheGround.IsEmpty()))
+	if (!(wallsToSpawnAgainstSnake.IsEmpty()))
 	{
-		for (int i = 0; i < wallsOnTheGround.Num(); ++i)
+		for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
 		{
-			for (int j = 0; j < wallsOnTheGround[i].Num(); ++j)
+			for (int j = 0; j < wallsToSpawnAgainstSnake[i].Num(); ++j)
 			{
-				if (wallsOnTheGround[i][j]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
-					wallsOnTheGround[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+				if (wallsToSpawnAgainstSnake[i][j]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+					wallsToSpawnAgainstSnake[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 				else
 				{
-					wallsOnTheGround[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+					wallsToSpawnAgainstSnake[i][j]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 					FTimerHandle timerDelay;
 					GetWorldTimerManager().SetTimer(timerDelay, this, &AGroundBase::ToggleCollisionWall, 5, false);
 				}
@@ -143,22 +143,22 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 			countSnakeElementsForBonusLevel += 50;
 			indexOfWall = 2;
 		}
-		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 3), currentPositionOfHeadSnake.Y + (paddingY * 3), currentPositionOfHeadSnake.Z);
+		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 2), currentPositionOfHeadSnake.Y + (paddingY * 2), currentPositionOfHeadSnake.Z);
 		if (newPositionOfWall.X >= minPositionX && newPositionOfWall.X <= maxPositionX &&
 			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY && 
-			newPositionOfWall != food->GetActorLocation())
+			newPositionOfWall != food->GetActorLocation() && CheckPositionsWallBeginPlay(newPositionOfWall))
 		{
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
 			tempWallsForAdd.Add(newWall);
 			FTimerHandle tymerDelay;
-			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 30, false);
+			GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 5, false);
 			if (paddingX != 0.f)
 				currentPositionOfHeadSnake.Y += snake->GetPadding();
 			else 
 				currentPositionOfHeadSnake.X += snake->GetPadding();
 		}
 	}
-	wallsOnTheGround.Add(tempWallsForAdd);
+	wallsToSpawnAgainstSnake.Add(tempWallsForAdd);
 }
 
 // Functions for softWall
@@ -206,12 +206,49 @@ bool AGroundBase::CheckPositionsSnakeElementsAndWalls(FVector currentPosition)
 	return false;
 }
 
-void AGroundBase::ChangeOneSoftWall(AWallBase* wall)
+bool AGroundBase::CheckPositionsWallBeginPlay(const FVector& currentPosition)
 {
-	
+	for (int i = 0; i < wallsToSpawnBeginPlay.Num(); ++i)
+	{
+		if (wallsToSpawnBeginPlay[i]->GetActorLocation() == currentPosition)
+			return false;
+	}
+
+	return true;
+}
+
+void AGroundBase::CheckingArrayForNull()
+{
+	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
+	{
+		if (wallsToSpawnAgainstSnake[i].IsEmpty())
+			wallsToSpawnAgainstSnake.RemoveAt(i);
+	}
+}
+
+void AGroundBase::SoftWallDestroy(AWallBase* wall)
+{
+	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
+	{
+		wallsToSpawnAgainstSnake[i].RemoveSingle(wall);
+		if (wallsToSpawnAgainstSnake[i].IsEmpty())
+			wallsToSpawnAgainstSnake.RemoveAt(i);
+	}
+
+	wallsToSpawnBeginPlay.RemoveSingle(wall);
+	wall->Destroy();
 }
 
 void AGroundBase::DestroyWalls()
 {
+	if (!(wallsToSpawnAgainstSnake.IsEmpty()))
+	{
+		for (int i = 0; i < wallsToSpawnAgainstSnake[0].Num();)
+		{
+			wallsToSpawnAgainstSnake[0][i]->Destroy();
+			wallsToSpawnAgainstSnake[0].RemoveAt(i);
+		}
+	}
 
+	CheckingArrayForNull();
 }

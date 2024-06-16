@@ -38,7 +38,7 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 				--counter;
 			}
 			else
-				groundOwner->ChangeOneSoftWall(this);
+				groundOwner->SoftWallDestroy(this);
 		}
 	}
 }
