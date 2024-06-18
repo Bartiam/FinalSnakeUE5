@@ -36,6 +36,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AGroundBase* groundOwner;
 
+	const float secondsBonusValidity = 10.f;
+	const float speedChangesOn = 0.05f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

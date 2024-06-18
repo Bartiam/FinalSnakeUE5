@@ -11,7 +11,7 @@ void ABonusFoodDecelerationBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->SlowDownSnake();
+			snake->SlowDownSnake(secondsBonusValidity, speedChangesOn);
 			Destroy();
 		}
 	}

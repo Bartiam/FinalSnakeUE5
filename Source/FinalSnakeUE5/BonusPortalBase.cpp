@@ -1,19 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BadFoodFromTheWallBase.h"
+#include "BonusPortalBase.h"
 #include "SnakeBase.h"
 
-void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
+void ABonusPortalBase::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))
 	{
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->SlowDownSnake(5.f, speedChangesOn);
-			snake->DeleteSnakeElement();
-			Destroy();
+			snake->ChangeLevel();
 		}
 	}
 }

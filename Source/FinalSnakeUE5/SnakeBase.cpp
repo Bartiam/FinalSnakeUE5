@@ -6,6 +6,7 @@
 #include "Interactable.h"
 #include "GroundBase.h"
 #include "FoodBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -102,38 +103,43 @@ void ASnakeBase::teleportSnake()
 	snakeElements[0]->SetActorLocation(FVector(currentLocationOfPrevHead.X * (-1), currentLocationOfPrevHead.Y * (-1), currentLocationOfPrevHead.Z));
 }
 
-void ASnakeBase::SlowDownSnake()
+void ASnakeBase::SlowDownSnake(const float& howManySeconds, const float& speedChange)
 {
 	if (currentStepIn == minSpeedStepIn)
 		return;
 
-	currentStepIn += 0.05f;
-	recentSpeedChanges = 0.05f;
+	currentStepIn += speedChange;
+	recentSpeedChanges = -speedChange;
 	SetActorTickInterval(currentStepIn);
 
 	FTimerHandle timerDelay;
-	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, 5, false);
+	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
 }
 
-void ASnakeBase::SpeedUpSnake()
+void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedChange)
 {
-	if (currentStepIn == maxSpeedStepIn)
+	if (currentStepIn == maxSpeedStepIn || currentStepIn == minSpeedStepIn)
 		return;
 
-	currentStepIn -= 0.05f;
-	recentSpeedChanges = -0.05f;
+	currentStepIn -= speedChange;
+	recentSpeedChanges = speedChange;
 	SetActorTickInterval(currentStepIn);
 
 	FTimerHandle timerDelay;
-	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, 5, false);
+	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
+}
+
+void ASnakeBase::ChangeLevel()
+{
+	UGameplayStatics::OpenLevel(this, FName(TEXT("SnakeBonusLevel")));
 }
 
 void ASnakeBase::CancellationBonus()
 {
 	if (recentSpeedChanges < 0.0f)
-		currentStepIn += 0.05f;
+		currentStepIn += recentSpeedChanges;
 	else
-		currentStepIn -= 0.05f;
+		currentStepIn -= recentSpeedChanges;
 
 	SetActorTickInterval(currentStepIn);
 }

@@ -85,18 +85,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Location Wall")
 	TArray<FVector> locationsOfWallToBeginPlay;
 
-	int32 countSnakeElementsForBonusLevel;
-
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
 	void SpawnWallBeginPlay();
 
-	FVector RandomPositionOfFood();
+	FVector RandomPosition();
 
 	bool CheckWallsInTheWorld(const FVector& currentSector);
 
-	bool CheckPositionsSnakeElementsAndWalls(FVector currentPosition);
+	bool CheckPositionsSnakeElementsAndFoods(FVector currentPosition);
 
 	bool CheckPositionsWallBeginPlay(const FVector& currentPosition);
 

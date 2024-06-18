@@ -16,7 +16,6 @@ AGroundBase::AGroundBase()
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ground"));
 	RootComponent = meshComponent;
-	countSnakeElementsForBonusLevel = 50;
 }
 
 // Getters
@@ -35,7 +34,7 @@ void AGroundBase::BeginPlay()
 	Super::BeginPlay();
 	SpawnWallBeginPlay();
 	DivideTheWorldIntoSectors();
-	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPositionOfFood()));
+	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPosition()));
 	food->groundOwner = this;
 }
 
@@ -77,7 +76,7 @@ void AGroundBase::SpawnWallBeginPlay()
 
 void AGroundBase::SpawnFood()
 {
-	food->SetActorLocation(RandomPositionOfFood());
+	food->SetActorLocation(RandomPosition());
 }
 
 void AGroundBase::ToggleCollisionWall()
@@ -142,16 +141,16 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 	for (int i = 0; i < 3; ++i)
 	{
 		float wallLungeChance = FMath::RandRange(0.f, 1.f);
-		int indexOfWall;
-		if (wallLungeChance > 0.3f)
-			indexOfWall = 0;
-		else
+		int indexOfWall = 0;
+		if (wallLungeChance <= 0.90f && wallLungeChance > 0.45f)
 			indexOfWall = 1;
-
-		if (snake->GetFullSnakeElements().Num() == countSnakeElementsForBonusLevel)
+		else if (wallLungeChance >= 0.95f)
 		{
-			countSnakeElementsForBonusLevel += 50;
 			indexOfWall = 2;
+			FVector newPositionOfPortalWall(RandomPosition());
+			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfPortalWall));
+			tempWallsForAdd.Add(newWall);
+			indexOfWall = 0;
 		}
 
 		FVector newPositionOfWall(currentPositionOfHeadSnake.X + (paddingX * 2), currentPositionOfHeadSnake.Y + (paddingY * 2), currentPositionOfHeadSnake.Z);
@@ -160,6 +159,7 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY && 
 			newPositionOfWall != food->GetActorLocation() && CheckPositionsWallBeginPlay(newPositionOfWall))
 		{
+										// indexOfWall == 0: WallBase; indexOfWall == 1: SoftWall; indexOfWall == 2: BonusPortal;
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
 			tempWallsForAdd.Add(newWall);
 		}
@@ -178,17 +178,17 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 
 void AGroundBase::BonusFoodSpawn(const int& typeOfFood)
 {
-	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[typeOfFood], FTransform(RandomPositionOfFood()));
+	auto newFoodFromTheWall = GetWorld()->SpawnActor<AFoodBase>(foodClasses[typeOfFood], FTransform(RandomPosition()));
 }
 
-FVector AGroundBase::RandomPositionOfFood()
+FVector AGroundBase::RandomPosition()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASnakeElementBase::StaticClass(), snakeElementsFromWorld);
 
 	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 	auto currentPosition = GetOneSector(randomIndex);
 
-	while (CheckPositionsSnakeElementsAndWalls(currentPosition))
+	while (CheckPositionsSnakeElementsAndFoods(currentPosition))
 	{
 		randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 		currentPosition = GetOneSector(randomIndex);
@@ -208,7 +208,7 @@ bool AGroundBase::CheckWallsInTheWorld(const FVector& currentSector)
 	return false;
 }
 
-bool AGroundBase::CheckPositionsSnakeElementsAndWalls(FVector currentPosition)
+bool AGroundBase::CheckPositionsSnakeElementsAndFoods(FVector currentPosition)
 {
 	for (int i = 0; i < snakeElementsFromWorld.Num(); ++i)
 	{
