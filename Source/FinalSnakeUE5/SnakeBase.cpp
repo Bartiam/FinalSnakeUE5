@@ -105,8 +105,16 @@ void ASnakeBase::teleportSnake()
 
 void ASnakeBase::SlowDownSnake(const float& howManySeconds, const float& speedChange)
 {
-	if (currentStepIn == minSpeedStepIn)
+	if (currentStepIn <= maxSpeedStepIn)
+	{
+		currentStepIn = maxSpeedStepIn;
 		return;
+	}
+	else if (currentStepIn >= minSpeedStepIn)
+	{
+		currentStepIn = minSpeedStepIn;
+		return;
+	}
 
 	currentStepIn += speedChange;
 	recentSpeedChanges = -speedChange;
@@ -118,8 +126,16 @@ void ASnakeBase::SlowDownSnake(const float& howManySeconds, const float& speedCh
 
 void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedChange)
 {
-	if (currentStepIn == maxSpeedStepIn || currentStepIn == minSpeedStepIn)
+	if (currentStepIn <= maxSpeedStepIn)
+	{
+		currentStepIn = maxSpeedStepIn;
 		return;
+	}
+	else if (currentStepIn >= minSpeedStepIn)
+	{
+		currentStepIn = minSpeedStepIn;
+		return;
+	}
 
 	currentStepIn -= speedChange;
 	recentSpeedChanges = speedChange;

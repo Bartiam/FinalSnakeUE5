@@ -142,9 +142,9 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 	{
 		float wallLungeChance = FMath::RandRange(0.f, 1.f);
 		int indexOfWall = 0;
-		if (wallLungeChance <= 0.90f && wallLungeChance > 0.45f)
+		if (wallLungeChance < 0.90f && wallLungeChance > 0.45f)
 			indexOfWall = 1;
-		else if (wallLungeChance >= 0.95f)
+		else if (wallLungeChance >= 0.90f)
 		{
 			indexOfWall = 2;
 			FVector newPositionOfPortalWall(RandomPosition());

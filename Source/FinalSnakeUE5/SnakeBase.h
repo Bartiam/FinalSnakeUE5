@@ -85,9 +85,9 @@ private:
 
 	float currentStepIn;
 
-	const float maxSpeedStepIn = 0.1f;
+	const float maxSpeedStepIn = 0.101f;
 
-	const float minSpeedStepIn = 0.3f;
+	const float minSpeedStepIn = 0.301f;
 
 	float recentSpeedChanges;
 
