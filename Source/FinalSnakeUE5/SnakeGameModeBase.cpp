@@ -2,4 +2,9 @@
 
 
 #include "SnakeGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
+void ASnakeGameModeBase::BonusLevel()
+{
+	UGameplayStatics::OpenLevel(this, TEXT("SnakeBonusLevel"));
+}

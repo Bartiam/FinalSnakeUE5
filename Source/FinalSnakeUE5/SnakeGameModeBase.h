@@ -9,9 +9,20 @@
 /**
  * 
  */
+
+UENUM()
+enum class EGameStates
+{
+	WON,
+	LOSE
+};
+
 UCLASS()
 class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+public:
+
+	void BonusLevel();
 };

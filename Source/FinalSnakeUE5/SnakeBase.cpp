@@ -6,7 +6,6 @@
 #include "Interactable.h"
 #include "GroundBase.h"
 #include "FoodBase.h"
-#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -143,11 +142,6 @@ void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedCha
 
 	FTimerHandle timerDelay;
 	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
-}
-
-void ASnakeBase::ChangeLevel()
-{
-	UGameplayStatics::OpenLevel(this, FName(TEXT("SnakeBonusLevel")));
 }
 
 void ASnakeBase::CancellationBonus()

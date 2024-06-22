@@ -59,8 +59,6 @@ public:
 
 	void SpeedUpSnake(const float& howManySeconds, const float& speedChange);
 
-	void ChangeLevel();
-
 	// Declaring public variebles
 	UPROPERTY(BlueprintReadWrite, Category = "World")
 	AGroundBase* mainWorld;

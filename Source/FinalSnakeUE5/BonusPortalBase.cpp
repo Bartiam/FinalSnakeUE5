@@ -3,15 +3,18 @@
 
 #include "BonusPortalBase.h"
 #include "SnakeBase.h"
+#include "SnakeGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void ABonusPortalBase::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))
 	{
-		auto snake = Cast<ASnakeBase>(interactor);
-		if (IsValid(snake))
+		ASnakeGameModeBase* gameMode = Cast<ASnakeGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (IsValid(gameMode))
 		{
-			snake->ChangeLevel();
+			gameMode->BonusLevel();
 		}
 	}
 }
