@@ -74,9 +74,6 @@ private:
 	UPROPERTY()
 	TArray<FVector> worldSectors;
 
-	UPROPERTY()
-	TArray<AActor*> snakeElementsFromWorld;
-
 	TArray<TArray<AWallBase*>> wallsToSpawnAgainstSnake;
 
 	TArray<AWallBase*> wallsToSpawnBeginPlay;
@@ -94,9 +91,13 @@ private:
 
 	bool CheckWallsInTheWorld(const FVector& currentSector);
 
-	bool CheckPositionsSnakeElementsAndFoods(FVector currentPosition);
+	bool CheckPositionsSnakeElementsAndFoods(const TArray<AActor*> currentArray, const FVector currentPosition);
 
 	bool CheckPositionsWallBeginPlay(const FVector& currentPosition);
+
+	bool IsThereWallInFrontOfTheSnakeHead(const ASnakeBase* snake);
+
+	bool IsThereFoodAndSnakeElementOnTheSpawnWall(const FVector& currentLocationToSpawnWall);
 
 	void CheckingArrayForNull();
 

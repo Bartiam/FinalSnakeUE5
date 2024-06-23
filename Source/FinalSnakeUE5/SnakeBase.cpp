@@ -104,52 +104,32 @@ void ASnakeBase::teleportSnake()
 
 void ASnakeBase::SlowDownSnake(const float& howManySeconds, const float& speedChange)
 {
-	if (currentStepIn <= maxSpeedStepIn)
-	{
-		currentStepIn = maxSpeedStepIn;
-		return;
-	}
-	else if (currentStepIn >= minSpeedStepIn)
-	{
-		currentStepIn = minSpeedStepIn;
-		return;
-	}
+	FTimerHandle timerDelay;
 
 	currentStepIn += speedChange;
-	recentSpeedChanges = -speedChange;
 	SetActorTickInterval(currentStepIn);
 
-	FTimerHandle timerDelay;
 	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
 }
 
 void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedChange)
 {
-	if (currentStepIn <= maxSpeedStepIn)
-	{
-		currentStepIn = maxSpeedStepIn;
-		return;
-	}
-	else if (currentStepIn >= minSpeedStepIn)
-	{
-		currentStepIn = minSpeedStepIn;
-		return;
-	}
+	FTimerHandle timerDelay;
 
 	currentStepIn -= speedChange;
-	recentSpeedChanges = speedChange;
 	SetActorTickInterval(currentStepIn);
 
-	FTimerHandle timerDelay;
 	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
 }
 
 void ASnakeBase::CancellationBonus()
 {
-	if (recentSpeedChanges < 0.0f)
-		currentStepIn += recentSpeedChanges;
+	float recentSpeedChanges = currentStepIn - initialStepIn;
+
+	if (recentSpeedChanges <= 0.0f)
+		currentStepIn += 0.05f;
 	else
-		currentStepIn -= recentSpeedChanges;
+		currentStepIn -= 0.05f;
 
 	SetActorTickInterval(currentStepIn);
 }

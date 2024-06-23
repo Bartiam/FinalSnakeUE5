@@ -11,7 +11,7 @@ void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->SlowDownSnake(5.f, speedChangesOn);
+			snake->SlowDownSnake(5.f, speedChangesOn * 2);
 			snake->DeleteSnakeElement();
 			Destroy();
 		}
