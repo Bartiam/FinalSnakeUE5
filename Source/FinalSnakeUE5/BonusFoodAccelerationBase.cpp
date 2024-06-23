@@ -3,6 +3,7 @@
 
 #include "BonusFoodAccelerationBase.h"
 #include "SnakeBase.h"
+#include "GroundBase.h"
 
 void ABonusFoodAccelerationBase::Interact(AActor* interactor, bool bIsHead)
 {
@@ -12,7 +13,7 @@ void ABonusFoodAccelerationBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			snake->SpeedUpSnake(secondsBonusValidity, speedChangesOn);
-			Destroy();
+			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "BadFoodFromTheWallBase.h"
 #include "SnakeBase.h"
+#include "GroundBase.h"
 
 void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 {
@@ -11,9 +12,11 @@ void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->SlowDownSnake(5.f, speedChangesOn * 2);
+			for (int i = 0; i < 2; ++i)
+				snake->SlowDownSnake(5.f, speedChangesOn);
+
 			snake->DeleteSnakeElement();
-			Destroy();
+			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}
 }

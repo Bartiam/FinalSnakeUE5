@@ -104,21 +104,27 @@ void ASnakeBase::teleportSnake()
 
 void ASnakeBase::SlowDownSnake(const float& howManySeconds, const float& speedChange)
 {
-	FTimerHandle timerDelay;
+	if ((currentStepIn + speedChange) >= minSpeedStepIn)
+		currentStepIn = minSpeedStepIn;
+	else
+		currentStepIn += speedChange;
 
-	currentStepIn += speedChange;
 	SetActorTickInterval(currentStepIn);
 
+	FTimerHandle timerDelay;
 	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
 }
 
 void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedChange)
 {
-	FTimerHandle timerDelay;
+	if ((currentStepIn - speedChange) <= maxSpeedStepIn)
+		currentStepIn = maxSpeedStepIn;
+	else
+		currentStepIn -= speedChange;
 
-	currentStepIn -= speedChange;
 	SetActorTickInterval(currentStepIn);
 
+	FTimerHandle timerDelay;
 	GetWorld()->GetTimerManager().SetTimer(timerDelay, this, &ASnakeBase::CancellationBonus, howManySeconds, false);
 }
 

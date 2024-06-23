@@ -49,7 +49,9 @@ public:
 	TArray<TSubclassOf<AWallBase>> wallsClasses;
 
 	// Declaring public functions
-	void SpawnFood();
+	void DestroyFoodInTheWorld(AFoodBase* currentFood);
+
+	void SpawnFood(const ASnakeBase* snake);
 
 	void ToggleCollisionWall();
 
@@ -57,7 +59,7 @@ public:
 
 	void SoftWallDestroy(AWallBase* wall);
 
-	void BonusFoodSpawn(const int& typeOfFood);
+	void BonusFoodSpawn(const ASnakeBase* snake, const int& typeOfFood);
 
 protected:
 	// Called when the game starts or when spawned
@@ -78,26 +80,32 @@ private:
 
 	TArray<AWallBase*> wallsToSpawnBeginPlay;
 
+	bool bIsToggleToSpawnWall;
+
 	// Variables for spawn wall in begin play
 	UPROPERTY(EditDefaultsOnly, Category = "Location Wall")
 	TArray<FVector> locationsOfWallToBeginPlay;
+
+	TArray<AFoodBase*> foodsInTheWorld;
 
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
 
 	void SpawnWallBeginPlay();
 
-	FVector RandomPosition();
+	FVector RandomPosition(const ASnakeBase* snake);
 
 	bool CheckWallsInTheWorld(const FVector& currentSector);
 
-	bool CheckPositionsSnakeElementsAndFoods(const TArray<AActor*> currentArray, const FVector currentPosition);
+	bool CheckPositionsSnakeElements(const ASnakeBase* snake, const FVector currentPosition);
+
+	bool CheckPositionsFoodOfTheWorld(const FVector currentPosition);
 
 	bool CheckPositionsWallBeginPlay(const FVector& currentPosition);
 
 	bool IsThereWallInFrontOfTheSnakeHead(const ASnakeBase* snake);
 
-	bool IsThereFoodAndSnakeElementOnTheSpawnWall(const FVector& currentLocationToSpawnWall);
+	bool IsThereFoodOrSnakeElementOnTheSpawnWall(const ASnakeBase* snake, const FVector& currentLocationToSpawnWall);
 
 	void CheckingArrayForNull();
 

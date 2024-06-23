@@ -13,7 +13,7 @@ void ABonusFoodPassageThroughWalls::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			groundOwner->ToggleCollisionWall();
-			Destroy();
+			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}
 }

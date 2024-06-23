@@ -36,7 +36,7 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			snake->AddSnakeElements();
-			groundOwner->SpawnFood();
+			groundOwner->SpawnFood(snake);
 
 			float checkChanceForSpawnWallsAgainsSnake = FMath::RandRange(0.f, 1.f);
 
@@ -49,9 +49,9 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 			{
 				checkChanceForSpawnWallsAgainsSnake = FMath::RandRange(0.f, 1.f);
 				if (checkChanceForSpawnWallsAgainsSnake >= 0.5f)
-					groundOwner->BonusFoodSpawn((int)(EFoodsEnum::BonusFoodAcceliration));
+					groundOwner->BonusFoodSpawn(snake, (int)(EFoodsEnum::BonusFoodAcceliration));
 				else 
-					groundOwner->BonusFoodSpawn((int)(EFoodsEnum::BonusFoodDeceleration));
+					groundOwner->BonusFoodSpawn(snake, (int)(EFoodsEnum::BonusFoodDeceleration));
 			}
 		}
 	}
