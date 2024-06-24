@@ -25,6 +25,9 @@ public:
 	const FVector GetOneSector(int index) const;
 	const int32 GetSizeOfSectors() const;
 
+	// Getters for UI blueprints
+	int32 GetWorldSecotrs();
+
 	// World Size Variables
 	UPROPERTY(EditDefaultsOnly, Category = "SIZES")
 	float minPositionX;

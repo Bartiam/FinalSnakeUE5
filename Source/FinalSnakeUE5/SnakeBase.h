@@ -62,6 +62,8 @@ public:
 	// Declaring public variebles
 	UPROPERTY(BlueprintReadWrite, Category = "World")
 	AGroundBase* mainWorld;
+
+	FTimerHandle timerForDead;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -112,4 +114,6 @@ private:
 
 	FVector LocationNewElement();
 	FVector LocationNewElementMoreOne(const FVector& locationLastElement, const FVector& penultimateElement);
+
+	void TimeToDead();
 };

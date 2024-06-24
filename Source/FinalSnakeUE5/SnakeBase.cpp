@@ -57,6 +57,7 @@ void ASnakeBase::BeginPlay()
 	Super::BeginPlay();
 	AddSnakeElements(initialSizeSnake);
 	SetActorTickInterval(currentStepIn);
+	TimeToDead();
 }
 
 // Called every frame
@@ -80,6 +81,8 @@ void ASnakeBase::AddSnakeElements(int count)
 			newSnakeElem->SetFirstElementMaterial_Implementation();
 		}
 	}
+
+	TimeToDead();
 }
 
 void ASnakeBase::StepBack()
@@ -234,6 +237,13 @@ FVector ASnakeBase::LocationNewElementMoreOne(const FVector& locationLastElement
 		result = FVector(locationLastElement.X, locationLastElement.Y + padding, locationLastElement.Z);
 
 	return result;
+}
+
+void ASnakeBase::TimeToDead()
+{
+	GetWorldTimerManager().ClearTimer(timerForDead);
+
+	GetWorldTimerManager().SetTimer(timerForDead, this, &ASnakeBase::DestroyFullSnakeElements, 10.f);
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other)

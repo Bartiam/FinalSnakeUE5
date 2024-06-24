@@ -1,0 +1,27 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/HUD.h"
+#include "SnakeHUDBase.generated.h"
+
+class USnakeUIBase;
+
+UCLASS()
+class FINALSNAKEUE5_API ASnakeHUDBase : public AHUD
+{
+	GENERATED_BODY()
+	
+public:
+	ASnakeHUDBase();
+
+	virtual void BeginPlay() override;
+
+private:
+
+	USnakeUIBase* userWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USnakeUIBase> userWidgetClass;
+};

@@ -29,6 +29,9 @@ const FVector AGroundBase::GetOneSector(int index) const
 const int32 AGroundBase::GetSizeOfSectors() const
 { return worldSectors.Num(); }
 
+int32 AGroundBase::GetWorldSecotrs()
+{ return worldSectors.Num(); }
+
 // Called when the game starts or when spawned
 void AGroundBase::BeginPlay()
 {
@@ -285,6 +288,15 @@ void AGroundBase::CheckingArrayForNull()
 
 void AGroundBase::SoftWallDestroy(AWallBase* wall)
 {
+	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
+	{
+		if (locationsOfWallToBeginPlay[i] == wall->GetActorLocation())
+		{
+			locationsOfWallToBeginPlay.RemoveAt(i);
+			break;
+		}
+	}
+
 	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
 	{
 		wallsToSpawnAgainstSnake[i].RemoveSingle(wall);
@@ -292,6 +304,9 @@ void AGroundBase::SoftWallDestroy(AWallBase* wall)
 
 	wallsToSpawnBeginPlay.RemoveSingle(wall);
 	wall->Destroy();
+
+	worldSectors.Empty();
+
 	DivideTheWorldIntoSectors();
 
 	CheckingArrayForNull();
