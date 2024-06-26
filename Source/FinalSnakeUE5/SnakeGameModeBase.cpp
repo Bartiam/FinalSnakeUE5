@@ -3,8 +3,13 @@
 
 #include "SnakeGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "SnakeHUDBase.h"
 
 void ASnakeGameModeBase::BonusLevel()
+{ UGameplayStatics::OpenLevel(this, TEXT("SnakeBonusLevel")); }
+
+void ASnakeGameModeBase::GameOver()
 {
-	UGameplayStatics::OpenLevel(this, TEXT("SnakeBonusLevel"));
+	auto currentHUD = Cast<ASnakeHUDBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeHUDBase::StaticClass()));
+	currentHUD->AddNewGameOverWidget();
 }

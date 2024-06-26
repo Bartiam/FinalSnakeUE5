@@ -47,7 +47,6 @@ void AGroundBase::BeginPlay()
 void AGroundBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 void AGroundBase::DestroyFoodInTheWorld(AFoodBase* currentFood)

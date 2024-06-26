@@ -41,13 +41,14 @@ public:
 	const FVector GetSnakeElementLocation(int index);
 	int32 GetNumbersOfSnakeElements();
 	const float GetPadding() const;
+	int32 GetScores() const;
 	//////////
 
 	// Declaring public functions
 
 	void SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other);
 
-	void DestroyFullSnakeElements();
+	void ThePlayerLost();
 
 	void AddSnakeElements(int count = 1);
 
@@ -88,6 +89,8 @@ private:
 	const float maxSpeedStepIn = 0.1f;
 
 	const float minSpeedStepIn = 0.3f;
+
+	int32 scores;
 
 	bool bSnakeCanMove;
 

@@ -6,12 +6,21 @@
 
 ASnakeHUDBase::ASnakeHUDBase() : Super()
 {
-	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UI(TEXT("/Game/Blueprints/UI/WBP_UIDuringTheGame"));
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UIDuringTheGame(TEXT("/Game/Blueprints/UI/WBP_UIDuringTheGame"));
+	UIDuringTheGameClass = WBP_UIDuringTheGame.Class;
 
-	userWidgetClass = WBP_UI.Class;
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UIGameOver(TEXT(""));
+	UIGameOverClass = WBP_UIGameOver.Class;
 }
 
 void ASnakeHUDBase::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ASnakeHUDBase::AddNewGameOverWidget()
+{
+	auto gameOverWidget = CreateWidget(GetWorld(), UIGameOverClass);
+
+	gameOverWidget->AddToViewport();
 }

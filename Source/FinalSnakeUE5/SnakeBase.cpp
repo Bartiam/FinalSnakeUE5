@@ -6,6 +6,8 @@
 #include "Interactable.h"
 #include "GroundBase.h"
 #include "FoodBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "SnakeGameModeBase.h"
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -17,6 +19,7 @@ ASnakeBase::ASnakeBase()
 	currentStepIn = initialStepIn;
 	bSnakeCanMove = true;
 	initialSizeSnake = 4;
+	scores = 0;
 }
 
 // Setters
@@ -25,12 +28,6 @@ void ASnakeBase::SetLastMoveDir(EMovementDirection moveDir)
 
 void ASnakeBase::SetSnakeCanMove(bool snakeCanMove)
 { this->bSnakeCanMove = snakeCanMove; }
-
-void ASnakeBase::DeleteSnakeElement()
-{
-	snakeElements[snakeElements.Num() - 1]->Destroy();
-	snakeElements.RemoveAt(snakeElements.Num() - 1);
-}
 
 // Getters
 EMovementDirection ASnakeBase::GetLastMoveDir() const
@@ -51,13 +48,15 @@ int32 ASnakeBase::GetNumbersOfSnakeElements()
 const float ASnakeBase::GetPadding() const
 { return padding; }
 
+int32 ASnakeBase::GetScores() const
+{ return scores; }
+
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	AddSnakeElements(initialSizeSnake);
 	SetActorTickInterval(currentStepIn);
-	TimeToStarveToDeath();
+	AddSnakeElements(initialSizeSnake);
 }
 
 // Called every frame
@@ -83,6 +82,8 @@ void ASnakeBase::AddSnakeElements(int count)
 	}
 
 	TimeToStarveToDeath();
+
+	scores += count;
 }
 
 void ASnakeBase::StepBack()
@@ -243,7 +244,7 @@ void ASnakeBase::TimeToStarveToDeath()
 {
 	GetWorldTimerManager().ClearTimer(timerForDead);
 
-	GetWorldTimerManager().SetTimer(timerForDead, this, &ASnakeBase::DestroyFullSnakeElements, 10.f);
+	GetWorldTimerManager().SetTimer(timerForDead, this, &ASnakeBase::ThePlayerLost, 30.f);
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* other)
@@ -261,13 +262,22 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* overlappedComp, AActor* 
 	}
 }
 
-void ASnakeBase::DestroyFullSnakeElements()
+void ASnakeBase::ThePlayerLost()
 {
 	for (int i = 0; i < snakeElements.Num();)
 	{
 		snakeElements[i]->Destroy();
 		snakeElements.RemoveAt(i);
 	}
-	Destroy();
+
+	auto gameMode = Cast<ASnakeGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	gameMode->GameOver();
 }
 
+void ASnakeBase::DeleteSnakeElement()
+{
+	snakeElements[snakeElements.Num() - 1]->Destroy();
+	snakeElements.RemoveAt(snakeElements.Num() - 1);
+	TimeToStarveToDeath();
+	scores--;
+}

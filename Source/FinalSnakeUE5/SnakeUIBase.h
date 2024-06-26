@@ -18,5 +18,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetCurrentTimeToDead();
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FString GetCurrentScores();
 };

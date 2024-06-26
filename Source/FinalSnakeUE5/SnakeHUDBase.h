@@ -19,5 +19,13 @@ public:
 private:
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UUserWidget> userWidgetClass;
+	TSubclassOf<class UUserWidget> UIDuringTheGameClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> UIGameOverClass;
+
+public:
+
+	UFUNCTION()
+	void AddNewGameOverWidget();
 };

@@ -9,6 +9,22 @@ float USnakeUIBase::GetCurrentTimeToDead()
 {
 	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
 
+	if (!IsValid(snake))
+		return 0;
+
+	return GetWorld()->GetTimerManager().GetTimerElapsed(snake->timerForDead) / 30.f;
+}
+
+FString USnakeUIBase::GetCurrentScores()
+{
+	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
+
+	if (!IsValid(snake))
+		return FString();
+
+	FString currentScores = "Score: ";
 	
-	return GetWorld()->GetTimerManager().GetTimerElapsed(snake->timerForDead) / 10.f;
+	currentScores.AppendInt(snake->GetScores());
+
+	return currentScores;
 }

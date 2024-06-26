@@ -6,17 +6,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "SnakeGameModeBase.generated.h"
 
-/**
- * 
- */
-
-UENUM()
-enum class EGameStates
-{
-	WON,
-	LOSE
-};
-
 UCLASS()
 class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 {
@@ -25,4 +14,6 @@ class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 public:
 
 	void BonusLevel();
+
+	void GameOver();
 };
