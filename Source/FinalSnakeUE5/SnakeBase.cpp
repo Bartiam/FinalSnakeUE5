@@ -57,7 +57,7 @@ void ASnakeBase::BeginPlay()
 	Super::BeginPlay();
 	AddSnakeElements(initialSizeSnake);
 	SetActorTickInterval(currentStepIn);
-	TimeToDead();
+	TimeToStarveToDeath();
 }
 
 // Called every frame
@@ -82,7 +82,7 @@ void ASnakeBase::AddSnakeElements(int count)
 		}
 	}
 
-	TimeToDead();
+	TimeToStarveToDeath();
 }
 
 void ASnakeBase::StepBack()
@@ -239,7 +239,7 @@ FVector ASnakeBase::LocationNewElementMoreOne(const FVector& locationLastElement
 	return result;
 }
 
-void ASnakeBase::TimeToDead()
+void ASnakeBase::TimeToStarveToDeath()
 {
 	GetWorldTimerManager().ClearTimer(timerForDead);
 

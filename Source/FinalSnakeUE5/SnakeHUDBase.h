@@ -6,8 +6,6 @@
 #include "GameFramework/HUD.h"
 #include "SnakeHUDBase.generated.h"
 
-class USnakeUIBase;
-
 UCLASS()
 class FINALSNAKEUE5_API ASnakeHUDBase : public AHUD
 {
@@ -20,8 +18,6 @@ public:
 
 private:
 
-	USnakeUIBase* userWidget;
-
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<USnakeUIBase> userWidgetClass;
+	TSubclassOf<class UUserWidget> userWidgetClass;
 };

@@ -3,11 +3,12 @@
 
 #include "SnakeHUDBase.h"
 #include "Blueprint/UserWidget.h"
-#include "SnakeUIBase.h"
 
 ASnakeHUDBase::ASnakeHUDBase() : Super()
 {
-	
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UI(TEXT("/Game/Blueprints/UI/WBP_UIDuringTheGame"));
+
+	userWidgetClass = WBP_UI.Class;
 }
 
 void ASnakeHUDBase::BeginPlay()

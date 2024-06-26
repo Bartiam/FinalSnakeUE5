@@ -10,6 +10,5 @@ float USnakeUIBase::GetCurrentTimeToDead()
 	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
 
 	
-
-	return GetWorld()->GetTimerManager().GetTimerElapsed(snake->timerForDead) / 100.f;
+	return GetWorld()->GetTimerManager().GetTimerElapsed(snake->timerForDead) / 10.f;
 }

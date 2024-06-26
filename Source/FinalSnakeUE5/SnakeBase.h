@@ -115,5 +115,5 @@ private:
 	FVector LocationNewElement();
 	FVector LocationNewElementMoreOne(const FVector& locationLastElement, const FVector& penultimateElement);
 
-	void TimeToDead();
+	void TimeToStarveToDeath();
 };
