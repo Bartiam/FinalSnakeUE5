@@ -270,6 +270,8 @@ void ASnakeBase::ThePlayerLost()
 		snakeElements.RemoveAt(i);
 	}
 
+	Destroy();
+
 	auto gameMode = Cast<ASnakeGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	gameMode->GameOver();
 }
@@ -280,4 +282,7 @@ void ASnakeBase::DeleteSnakeElement()
 	snakeElements.RemoveAt(snakeElements.Num() - 1);
 	TimeToStarveToDeath();
 	scores--;
+
+	if (scores <= 0.f)
+		ThePlayerLost();
 }

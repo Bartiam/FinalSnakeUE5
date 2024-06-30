@@ -10,6 +10,7 @@ ASnakePawnBase::ASnakePawnBase()
 	PrimaryActorTick.bCanEverTick = true;
 	mainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Snake Camera"));
 	RootComponent = mainCamera;
+	bIsGameOver = false;
 }
 
 // Called when the game starts or when spawned

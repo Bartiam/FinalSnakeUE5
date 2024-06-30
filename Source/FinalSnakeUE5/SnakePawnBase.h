@@ -31,6 +31,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsGameOver;
+
 private:
 	// Declaring private variables
 	UPROPERTY(VisibleDefaultsOnly, Category = "Camera")

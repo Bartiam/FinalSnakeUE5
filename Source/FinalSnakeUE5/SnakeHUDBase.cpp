@@ -22,5 +22,7 @@ void ASnakeHUDBase::AddNewGameOverWidget()
 {
 	auto gameOverWidget = CreateWidget(GetWorld(), UIGameOverClass);
 
+	GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+
 	gameOverWidget->AddToViewport();
 }

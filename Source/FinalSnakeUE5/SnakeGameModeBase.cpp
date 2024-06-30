@@ -4,12 +4,16 @@
 #include "SnakeGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "SnakeHUDBase.h"
+#include "SnakePawnBase.h"
 
 void ASnakeGameModeBase::BonusLevel()
 { UGameplayStatics::OpenLevel(this, TEXT("SnakeBonusLevel")); }
 
 void ASnakeGameModeBase::GameOver()
 {
-	auto currentHUD = Cast<ASnakeHUDBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeHUDBase::StaticClass()));
-	currentHUD->AddNewGameOverWidget();
+	auto gameOverHUD = Cast<ASnakeHUDBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeHUDBase::StaticClass()));
+	gameOverHUD->AddNewGameOverWidget();
+
+	auto pawn = Cast<ASnakePawnBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakePawnBase::StaticClass()));
+	pawn->bIsGameOver = true;
 }
