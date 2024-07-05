@@ -89,12 +89,12 @@ void AGroundBase::SpawnWallBeginPlay()
 }
 
 void AGroundBase::SpawnFood(const ASnakeBase* snake)
-{
-	food->SetActorLocation(RandomPosition(snake));
-}
+{ food->SetActorLocation(RandomPosition(snake)); }
 
 void AGroundBase::ToggleCollisionWall()
 {
+	GetWorldTimerManager().ClearTimer(timeToWalkThroughWalls);
+
 	if (!(wallsToSpawnAgainstSnake.IsEmpty()))
 	{
 		for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
@@ -123,8 +123,7 @@ void AGroundBase::ToggleCollisionWall()
 	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
 	{
 		bIsToggleToSpawnWall = true;
-		FTimerHandle timerDelay;
-		GetWorldTimerManager().SetTimer(timerDelay, this, &AGroundBase::ToggleCollisionWall, 5, false);
+		GetWorldTimerManager().SetTimer(timeToWalkThroughWalls, this, &AGroundBase::ToggleCollisionWall, 5, false);
 	}
 }
 

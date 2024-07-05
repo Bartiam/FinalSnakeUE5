@@ -82,13 +82,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float padding;
 
-	const float initialStepIn = 0.2f;
+	const float initialStepIn = 0.25f;
 
 	float currentStepIn;
 
 	const float maxSpeedStepIn = 0.1f;
 
-	const float minSpeedStepIn = 0.3f;
+	const float minSpeedStepIn = 0.4f;
 
 	int32 scores;
 
@@ -103,6 +103,13 @@ private:
 
 	bool bIsPassingThroughWall;
 	///////////////////////////////
+
+	// Private timers for gameplay
+
+	FTimerHandle timerSlowDownSnake;
+	FTimerHandle timerSpeedUpSnake;
+
+	//////////////////////////////
 
 	// Declaring private functions
 

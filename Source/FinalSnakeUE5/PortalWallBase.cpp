@@ -18,7 +18,7 @@ void APortalWallBase::Interact(AActor* interactor, bool bIsHead)
 			if (checkChanceLoseSnakeElement > 0.8f)
 			{
 				for (int i = 0; i < 2; ++i)
-					snake->SlowDownSnake(5.f, 0.1f);
+					snake->SlowDownSnake(10.f, 0.15f);
 
 				snake->DeleteSnakeElement();
 			}

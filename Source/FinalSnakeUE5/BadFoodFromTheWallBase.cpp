@@ -13,7 +13,7 @@ void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		if (IsValid(snake))
 		{
 			for (int i = 0; i < 2; ++i)
-				snake->SlowDownSnake(5.f, speedChangesOn);
+				snake->SlowDownSnake((secondsBonusValidity * 2), speedChangesOn);
 
 			snake->DeleteSnakeElement();
 			groundOwner->DestroyFoodInTheWorld(this);

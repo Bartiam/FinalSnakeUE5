@@ -74,6 +74,8 @@ public:
 
 private:
 
+	// Private timers for gameplay
+	FTimerHandle timeToWalkThroughWalls;
 
 	// Declaring private variables
 	UPROPERTY()
