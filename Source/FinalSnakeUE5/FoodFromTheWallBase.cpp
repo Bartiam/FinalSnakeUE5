@@ -14,7 +14,7 @@ void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->AddSnakeElements(3);
+			snake->AddSnakeElements(4);
 			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}

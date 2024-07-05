@@ -52,7 +52,7 @@ public:
 	TArray<TSubclassOf<AWallBase>> wallsClasses;
 
 	// Declaring public functions
-	void DestroyFoodInTheWorld(AFoodBase* currentFood);
+	void DestroyFoodInTheWorld(AFoodBase* foodToDelete);
 
 	void SpawnFood(const ASnakeBase* snake);
 

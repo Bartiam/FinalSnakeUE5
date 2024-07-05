@@ -48,6 +48,4 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
-
-	
 };

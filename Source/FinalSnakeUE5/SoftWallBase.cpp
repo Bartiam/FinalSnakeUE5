@@ -10,7 +10,7 @@ void ASoftWallBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	counter = FMath::RandRange(1, 3);
+	counter = FMath::RandRange(0, 3);
 }
 
 void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)

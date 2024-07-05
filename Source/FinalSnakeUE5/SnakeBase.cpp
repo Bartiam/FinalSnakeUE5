@@ -136,12 +136,7 @@ void ASnakeBase::SpeedUpSnake(const float& howManySeconds, const float& speedCha
 
 void ASnakeBase::CancellationBonus()
 {
-	float recentSpeedChanges = currentStepIn - initialStepIn;
-
-	if (recentSpeedChanges <= 0.0f)
-		currentStepIn += 0.05f;
-	else
-		currentStepIn -= 0.05f;
+	currentStepIn = initialStepIn;
 
 	SetActorTickInterval(currentStepIn);
 }

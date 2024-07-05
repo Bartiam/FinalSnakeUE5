@@ -38,7 +38,8 @@ void AGroundBase::BeginPlay()
 	Super::BeginPlay();
 	SpawnWallBeginPlay();
 	DivideTheWorldIntoSectors();
-	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(worldSectors[90]));
+	ASnakeBase* snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
+	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPosition(snake)));
 	food->groundOwner = this;
 	foodsInTheWorld.Add(food);
 }
@@ -49,10 +50,10 @@ void AGroundBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AGroundBase::DestroyFoodInTheWorld(AFoodBase* currentFood)
+void AGroundBase::DestroyFoodInTheWorld(AFoodBase* foodToDelete)
 {
-	foodsInTheWorld.RemoveSingle(currentFood);
-	currentFood->Destroy();
+	foodsInTheWorld.RemoveSingle(foodToDelete);
+	foodToDelete->Destroy();
 }
 
 void AGroundBase::DivideTheWorldIntoSectors()
