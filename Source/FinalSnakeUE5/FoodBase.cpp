@@ -56,3 +56,12 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 		}
 	}
 }
+
+void AFoodBase::SetTimerForCurrentFood()
+{
+	FTimerHandle timerDelay;
+	GetWorldTimerManager().SetTimer(timerDelay, this, &AFoodBase::IntermediateFunction, 15, false);
+}
+
+void AFoodBase::IntermediateFunction()
+{ groundOwner->DestroyFoodInTheWorld(this); }

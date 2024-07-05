@@ -48,4 +48,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
+
+	// Functions for setting the fruit destruction timer
+	void SetTimerForCurrentFood();
+
+private:
+	// An intermediate function for calling the food destruction function
+	void IntermediateFunction();
 };

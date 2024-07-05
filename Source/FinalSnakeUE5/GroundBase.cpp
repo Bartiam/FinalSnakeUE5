@@ -52,8 +52,11 @@ void AGroundBase::Tick(float DeltaTime)
 
 void AGroundBase::DestroyFoodInTheWorld(AFoodBase* foodToDelete)
 {
-	foodsInTheWorld.RemoveSingle(foodToDelete);
-	foodToDelete->Destroy();
+	if (IsValid(foodToDelete))
+	{
+		foodsInTheWorld.RemoveSingle(foodToDelete);
+		foodToDelete->Destroy();
+	}
 }
 
 void AGroundBase::DivideTheWorldIntoSectors()
@@ -204,6 +207,7 @@ void AGroundBase::BonusFoodSpawn(const ASnakeBase* snake, const int& typeOfFood)
 	auto newFood = GetWorld()->SpawnActor<AFoodBase>(foodClasses[typeOfFood], FTransform(RandomPosition(snake)));
 	newFood->groundOwner = this;
 	foodsInTheWorld.Add(newFood);
+	newFood->SetTimerForCurrentFood();
 }
 
 FVector AGroundBase::RandomPosition(const ASnakeBase* snake)
