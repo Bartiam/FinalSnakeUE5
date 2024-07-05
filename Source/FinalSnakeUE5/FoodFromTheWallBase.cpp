@@ -4,6 +4,8 @@
 #include "FoodFromTheWallBase.h"
 #include "SnakeBase.h"
 #include "GroundBase.h"
+#include "SnakeGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 {

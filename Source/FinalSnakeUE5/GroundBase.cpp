@@ -159,15 +159,6 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 
 	wallLungeChance = FMath::RandRange(0.f, 1.f);
 
-	if (wallLungeChance >= 0.99f)
-	{
-		indexOfWall = 2;
-		FVector newPositionOfPortalWall(RandomPosition(snake));
-		AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfPortalWall));
-		tempWallsForAdd.Add(newWall);
-		indexOfWall = 0;
-	}
-
 	if (!IsThereWallInFrontOfTheSnakeHead(snake))
 		return;
 

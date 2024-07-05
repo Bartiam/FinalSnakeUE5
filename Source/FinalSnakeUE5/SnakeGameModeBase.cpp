@@ -6,9 +6,6 @@
 #include "SnakeHUDBase.h"
 #include "SnakePawnBase.h"
 
-void ASnakeGameModeBase::BonusLevel()
-{ UGameplayStatics::OpenLevel(this, TEXT("SnakeBonusLevel")); }
-
 void ASnakeGameModeBase::GameOver()
 {
 	auto gameOverHUD = Cast<ASnakeHUDBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeHUDBase::StaticClass()));

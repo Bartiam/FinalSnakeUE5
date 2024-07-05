@@ -13,7 +13,5 @@ class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 
 public:
 
-	void BonusLevel();
-
 	void GameOver();
 };
