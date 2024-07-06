@@ -2,6 +2,14 @@
 
 
 #include "SnakePawnBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "FoodBase.h"
+
+#include "SnakeElementBase.h"
+
+#include "BonusFoodAccelerationBase.h"
+#include "BonusFoodDecelerationBase.h"
+#include "BonusFoodPassageThroughWalls.h"
 
 // Sets default values
 ASnakePawnBase::ASnakePawnBase()
@@ -36,6 +44,7 @@ void ASnakePawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Vertical", this, &ASnakePawnBase::HandleVerticalInput);
 	PlayerInputComponent->BindAxis("Horizontal", this, &ASnakePawnBase::HandleHorizontalInput);
 
+	PlayerInputComponent->BindAction("UseSkill", EInputEvent::IE_Pressed, this, &ASnakePawnBase::UseCurrentSkill);
 }
 
 void ASnakePawnBase::CreateSnakeActor()
@@ -72,6 +81,18 @@ void ASnakePawnBase::HandleHorizontalInput(float value)
 			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
 			snakeActor->SetSnakeCanMove(false);
 		}
+	}
+}
+
+void ASnakePawnBase::UseCurrentSkill()
+{
+	auto currentSkill = snakeActor->GetSkill();
+
+	if (IsValid(currentSkill))
+	{
+		auto snakeElements = snakeActor->GetFullSnakeElements();
+
+		currentSkill->SetActorLocation(snakeElements[0]->GetActorLocation());
 	}
 }
 

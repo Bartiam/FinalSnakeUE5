@@ -51,4 +51,6 @@ private:
 	void HandleVerticalInput(float value);
 
 	void HandleHorizontalInput(float value);
+
+	void UseCurrentSkill();
 };

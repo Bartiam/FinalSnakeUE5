@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
 #include "SnakeBase.generated.h"
 
 class ASnakeElementBase;
 class AGroundBase;
+class AFoodBase;
 
 UENUM()
 enum class EMovementDirection
@@ -32,6 +32,7 @@ public:
 	void SetLastMoveDir(EMovementDirection moveDir);
 	void SetSnakeCanMove(bool snakeCanMove);
 	void DeleteSnakeElement();
+	void SetSkill(AFoodBase* newSkill);
 	//////////
 	
 	// Getters
@@ -42,6 +43,7 @@ public:
 	int32 GetNumbersOfSnakeElements();
 	const float GetPadding() const;
 	int32 GetScores() const;
+	AFoodBase* GetSkill() const;
 	//////////
 
 	// Declaring public functions
@@ -121,6 +123,9 @@ private:
 	FVector lastPosition;
 	UPROPERTY()
 	FVector previousLastPosition;
+
+	UPROPERTY()
+	AFoodBase* skill;
 
 	FVector LocationNewElement();
 	FVector LocationNewElementMoreOne(const FVector& locationLastElement, const FVector& penultimateElement);

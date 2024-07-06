@@ -21,4 +21,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FString GetCurrentScores();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FString GetCurrentSkill();
 };

@@ -29,6 +29,12 @@ void ASnakeBase::SetLastMoveDir(EMovementDirection moveDir)
 void ASnakeBase::SetSnakeCanMove(bool snakeCanMove)
 { this->bSnakeCanMove = snakeCanMove; }
 
+void ASnakeBase::SetSkill(AFoodBase* newSkill)
+{
+	if (!IsValid(skill))
+		skill = newSkill;
+}
+
 // Getters
 EMovementDirection ASnakeBase::GetLastMoveDir() const
 { return lastMoveDir; }
@@ -50,6 +56,9 @@ const float ASnakeBase::GetPadding() const
 
 int32 ASnakeBase::GetScores() const
 { return scores; }
+
+AFoodBase* ASnakeBase::GetSkill() const
+{ return skill; }
 
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()

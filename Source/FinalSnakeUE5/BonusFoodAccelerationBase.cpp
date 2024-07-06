@@ -12,8 +12,18 @@ void ABonusFoodAccelerationBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->SpeedUpSnake(secondsBonusValidity, speedChangesOn);
-			groundOwner->DestroyFoodInTheWorld(this);
+			if (IsValid(snake->GetSkill()))
+			{
+				snake->SpeedUpSnake(secondsBonusValidity, speedChangesOn);
+				groundOwner->DestroyFoodInTheWorld(this);
+			}
+			else
+			{
+				snake->SetSkill(this);
+				FVector newLocation = FVector(GetActorLocation().X, GetActorLocation().Y, (GetActorLocation().Z - 100));
+
+				SetActorLocation(newLocation);
+			}
 		}
 	}
 }

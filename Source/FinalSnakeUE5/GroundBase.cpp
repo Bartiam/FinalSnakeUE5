@@ -122,7 +122,9 @@ void AGroundBase::ToggleCollisionWall()
 	}
 
 	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)
+	{
 		bIsToggleToSpawnWall = false;
+	}
 
 	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
 	{

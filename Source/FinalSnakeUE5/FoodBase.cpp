@@ -5,6 +5,7 @@
 #include "SnakeBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "GroundBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFoodBase::AFoodBase()
@@ -64,4 +65,17 @@ void AFoodBase::SetTimerForCurrentFood()
 }
 
 void AFoodBase::IntermediateFunction()
-{ groundOwner->DestroyFoodInTheWorld(this); }
+{
+	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
+	if (IsValid(snake))
+	{
+		auto currentSkill = snake->GetSkill();
+		if (IsValid(currentSkill))
+		{
+			if (currentSkill != this)
+				groundOwner->DestroyFoodInTheWorld(this);
+		}
+		else
+			groundOwner->DestroyFoodInTheWorld(this);
+	}
+}
