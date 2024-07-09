@@ -13,6 +13,7 @@ ASnakeElementBase::ASnakeElementBase()
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
 	meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	meshComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+
 }
 
 void ASnakeElementBase::SetSnakeOwner(ASnakeBase* owner)

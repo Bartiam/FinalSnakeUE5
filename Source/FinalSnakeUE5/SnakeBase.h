@@ -67,6 +67,9 @@ public:
 	AGroundBase* mainWorld;
 
 	FTimerHandle timerForDead;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Snake elements")
+	TSubclassOf<ASnakeElementBase> snakeELementClass;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -78,8 +81,6 @@ public:
 
 private:
 	// Declaring private variables
-	UPROPERTY(EditDefaultsOnly, Category = "Snake elements")
-	TSubclassOf<ASnakeElementBase> snakeELementClass;
 
 	UPROPERTY(EditDefaultsOnly)
 	float padding;
