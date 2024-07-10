@@ -36,7 +36,7 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->AddSnakeElements(3);
+			snake->AddSnakeElements(2);
 			groundOwner->SpawnFood(snake);
 
 			float checkChanceForSpawnWallsAgainsSnake = FMath::RandRange(0.f, 1.f);

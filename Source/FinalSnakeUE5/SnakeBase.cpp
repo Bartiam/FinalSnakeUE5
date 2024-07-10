@@ -79,16 +79,18 @@ void ASnakeBase::AddSnakeElements(int count)
 {
 	for (int i = 0; i < count; ++i)
 	{
-		ASnakeElementBase* newSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(snakeELementClass, FTransform(LocationNewElement()));
+		ASnakeElementBase* newSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(snakeELementClass, FTransform(RotationNewElement(), LocationNewElement()));
 		newSnakeElem->SetActorHiddenInGame(true);
 		newSnakeElem->SetSnakeOwner(this);
 		int32 elemIndex = snakeElements.Add(newSnakeElem);
 		if (elemIndex == 0)
 		{
-			newSnakeElem->SetFirstElementMaterial();
-			newSnakeElem->SetFirstElementMaterial_Implementation();
+			newSnakeElem->SetFirstElementMesh();
+			newSnakeElem->SetFirstElementMesh_Implementation();
 		}
 	}
+
+	SetSnakeElementsAssets();
 
 	TimeToStarveToDeath();
 
@@ -103,9 +105,14 @@ void ASnakeBase::StepBack()
 		auto currentElem = snakeElements[i];
 		auto nextElem = snakeElements[i + 2];
 		currentElem->SetActorLocation(nextElem->GetActorLocation());
+		currentElem->SetActorRotation(nextElem->GetActorRotation());
 	}
 	snakeElements[snakeElements.Num() - 1]->SetActorLocation(previousLastPosition);
 	snakeElements[snakeElements.Num() - 2]->SetActorLocation(lastPosition);
+
+	snakeElements[snakeElements.Num() - 1]->SetActorRotation(previousElemRotation);
+	snakeElements[snakeElements.Num() - 2]->SetActorRotation(lastElemRotation);
+
 	snakeElements[0]->ToggleCollision();
 }
 
@@ -160,15 +167,19 @@ void ASnakeBase::MoveSnake()
 	{
 	case EMovementDirection::UP:
 		movementVector.X += padding;
+		snakeElements[0]->SetActorRotation(FRotator(0.f, 270.f, 0.f));
 		break;
 	case EMovementDirection::DOWN:
 		movementVector.X -= padding;
+		snakeElements[0]->SetActorRotation(FRotator(0.f, 90.f, 0.f));
 		break;
 	case EMovementDirection::LEFT:
 		movementVector.Y -= padding;
+		snakeElements[0]->SetActorRotation(FRotator(0.f, 180.f, 0.f));
 		break;
 	case EMovementDirection::RIGHT:
 		movementVector.Y += padding;
+		snakeElements[0]->SetActorRotation(FRotator(0.f, 0.f, 0.f));
 		break;
 	}
 
@@ -176,18 +187,41 @@ void ASnakeBase::MoveSnake()
 	previousLastPosition = lastPosition;
 	lastPosition = snakeElements[snakeElements.Num() - 1]->GetActorLocation();
 
+	previousElemRotation = lastElemRotation;
+	lastElemRotation = snakeElements[snakeElements.Num() - 1]->GetActorRotation();
 
 	for (int i = snakeElements.Num() - 1; i > 0; --i)
 	{
 		auto currentELem = snakeElements[i];
 		auto prevElem = snakeElements[i - 1];
 		currentELem->SetActorLocation(prevElem->GetActorLocation());
+		currentELem->SetActorRotation(prevElem->GetActorRotation());
 		currentELem->SetActorHiddenInGame(false);
 	}
 
 	snakeElements[0]->AddActorWorldOffset(movementVector);
 	snakeElements[0]->SetActorHiddenInGame(false);
 	snakeElements[0]->ToggleCollision();
+}
+
+void ASnakeBase::SetSnakeElementsAssets()
+{
+	for (int i = 1; i < snakeElements.Num(); ++i)
+		snakeElements[i]->SetElementsMesh();
+
+	snakeElements[snakeElements.Num() - 1]->SetLastElementMesh();
+}
+
+FRotator ASnakeBase::RotationNewElement()
+{
+	FRotator result;
+
+	if (GetNumbersOfSnakeElements() == 0)
+		result = FRotator(0.f, 90.f, 0.f);
+	else
+		result = snakeElements[snakeElements.Num() - 1]->GetActorRotation();
+
+	return result;
 }
 
 FVector ASnakeBase::LocationNewElement()
@@ -289,6 +323,8 @@ void ASnakeBase::DeleteSnakeElement()
 	TimeToStarveToDeath();
 	scores--;
 
-	if (scores <= 0.f)
+	SetSnakeElementsAssets();
+
+	if (snakeElements.Num() <= 1)
 		ThePlayerLost();
 }

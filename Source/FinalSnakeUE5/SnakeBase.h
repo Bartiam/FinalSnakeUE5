@@ -120,14 +120,23 @@ private:
 
 	void MoveSnake();
 
+	void SetSnakeElementsAssets();
+
 	UPROPERTY()
 	FVector lastPosition;
 	UPROPERTY()
 	FVector previousLastPosition;
 
 	UPROPERTY()
+	FRotator lastElemRotation;
+
+	UPROPERTY()
+	FRotator previousElemRotation;
+
+	UPROPERTY()
 	AFoodBase* skill;
 
+	FRotator RotationNewElement();
 	FVector LocationNewElement();
 	FVector LocationNewElementMoreOne(const FVector& locationLastElement, const FVector& penultimateElement);
 

@@ -12,10 +12,16 @@ void ABadFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			for (int i = 0; i < 2; ++i)
-				snake->SlowDownSnake((secondsBonusValidity * 2), speedChangesOn);
+			float chanceToLoseBodyPart = FMath::RandRange(0.f, 1.f);
 
-			snake->DeleteSnakeElement();
+			if (chanceToLoseBodyPart <= 0.5f)
+				snake->AddSnakeElements();
+			else
+			{
+				snake->DeleteSnakeElement();
+				snake->SlowDownSnake((secondsBonusValidity * 2), speedChangesOn);
+			}
+
 			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}

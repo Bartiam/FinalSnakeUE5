@@ -24,8 +24,16 @@ public:
 	void SetSnakeOwner(ASnakeBase* owner);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void SetFirstElementMaterial();
-	void SetFirstElementMaterial_Implementation();
+	void SetFirstElementMesh();
+	void SetFirstElementMesh_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetElementsMesh();
+	void SetElementsMesh_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetLastElementMesh();
+	void SetLastElementMesh_Implementation();
 
 	void ToggleCollision();
 
