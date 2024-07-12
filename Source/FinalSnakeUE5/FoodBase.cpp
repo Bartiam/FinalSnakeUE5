@@ -15,6 +15,9 @@ AFoodBase::AFoodBase()
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Food"));
 }
 
+FString AFoodBase::GetNameOfSkill()
+{return FString();}
+
 // Called when the game starts or when spawned
 void AFoodBase::BeginPlay()
 {

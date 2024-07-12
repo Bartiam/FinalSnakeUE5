@@ -8,9 +8,6 @@ ASnakeHUDBase::ASnakeHUDBase() : Super()
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UIDuringTheGame(TEXT("/Game/Blueprints/UI/WBP_UIDuringTheGame"));
 	UIDuringTheGameClass = WBP_UIDuringTheGame.Class;
-
-	ConstructorHelpers::FClassFinder<UUserWidget> WBP_UIGameOver(TEXT(""));
-	UIGameOverClass = WBP_UIGameOver.Class;
 }
 
 void ASnakeHUDBase::BeginPlay()

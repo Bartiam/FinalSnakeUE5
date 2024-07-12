@@ -4,6 +4,7 @@
 #include "SnakeUIBase.h"
 #include "SnakeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/Image.h"
 #include "FoodBase.h"
 
 float USnakeUIBase::GetCurrentTimeToDead()
@@ -30,19 +31,25 @@ FString USnakeUIBase::GetCurrentScores()
 	return currentScores;
 }
 
-FString USnakeUIBase::GetCurrentSkill()
+UTexture* USnakeUIBase::GetIcon()
 {
 	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
 
 	if (!IsValid(snake))
-		return FString("Nothing");
+		return nullptr;
 
-	auto currentSkill = snake->GetSkill();
+	if (!IsValid(snake->GetSkill()))
+		return snake->defaultIcon;
 
-	if (!IsValid(currentSkill))
-		return FString("Nothing");
+	return snake->GetSkill()->icon;
+}
 
-	FString currentNameOfSkill = snake->GetSkill()->GetName();
+FString USnakeUIBase::GetNameOfSkill()
+{
+	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
 
-	return currentNameOfSkill;
+	if (!IsValid(snake) || !IsValid(snake->GetSkill()))
+		return FString(TEXT("Nothing"));
+
+	return snake->GetSkill()->GetNameOfSkill();
 }

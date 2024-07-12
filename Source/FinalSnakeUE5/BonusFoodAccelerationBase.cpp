@@ -5,6 +5,9 @@
 #include "SnakeBase.h"
 #include "GroundBase.h"
 
+FString ABonusFoodAccelerationBase::GetNameOfSkill()
+{ return FString(TEXT("Acceleration speed")); }
+
 void ABonusFoodAccelerationBase::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))
@@ -20,6 +23,7 @@ void ABonusFoodAccelerationBase::Interact(AActor* interactor, bool bIsHead)
 			else
 			{
 				snake->SetSkill(this);
+
 				FVector newLocation = FVector(GetActorLocation().X, GetActorLocation().Y, (GetActorLocation().Z - 100));
 
 				SetActorLocation(newLocation);

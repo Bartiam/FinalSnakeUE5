@@ -39,6 +39,11 @@ public:
 	const float secondsBonusValidity = 5.f;
 	const float speedChangesOn = 0.15f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UTexture* icon;
+
+	virtual FString GetNameOfSkill();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

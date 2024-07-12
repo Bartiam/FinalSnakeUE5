@@ -63,6 +63,9 @@ public:
 	void SpeedUpSnake(const float& howManySeconds, const float& speedChange);
 
 	// Declaring public variebles
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UTexture* defaultIcon;
+
 	UPROPERTY(BlueprintReadWrite, Category = "World")
 	AGroundBase* mainWorld;
 

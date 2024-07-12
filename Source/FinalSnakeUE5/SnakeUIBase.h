@@ -6,9 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "SnakeUIBase.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class FINALSNAKEUE5_API USnakeUIBase : public UUserWidget
 {
@@ -23,5 +20,8 @@ public:
 	FString GetCurrentScores();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FString GetCurrentSkill();
+	UTexture* GetIcon();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FString GetNameOfSkill();
 };

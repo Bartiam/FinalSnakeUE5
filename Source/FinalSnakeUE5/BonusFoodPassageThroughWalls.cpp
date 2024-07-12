@@ -5,6 +5,9 @@
 #include "SnakeBase.h"
 #include "GroundBase.h"
 
+FString ABonusFoodPassageThroughWalls::GetNameOfSkill()
+{ return FString(TEXT("Passage through wall")); }
+
 void ABonusFoodPassageThroughWalls::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))

@@ -5,6 +5,9 @@
 #include "SnakeBase.h"
 #include "GroundBase.h"
 
+FString ABonusFoodDecelerationBase::GetNameOfSkill()
+{ return FString(TEXT("Deceleration speed")); }
+
 void ABonusFoodDecelerationBase::Interact(AActor* interactor, bool bIsHead)
 {
 	if (IsValid(interactor))
