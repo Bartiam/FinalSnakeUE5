@@ -60,4 +60,10 @@ public:
 private:
 	// An intermediate function for calling the food destruction function
 	void IntermediateFunction();
+
+	void FlashingFoodInTheGame();
+
+	void SettingTimerToDisplayFoodInTheWorld();
+
+	bool bIsSwitchHiddenInGame;
 };

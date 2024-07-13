@@ -13,6 +13,7 @@ AFoodBase::AFoodBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Food"));
+	bIsSwitchHiddenInGame = true;
 }
 
 FString AFoodBase::GetNameOfSkill()
@@ -63,8 +64,10 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 
 void AFoodBase::SetTimerForCurrentFood()
 {
-	FTimerHandle timerDelay;
-	GetWorldTimerManager().SetTimer(timerDelay, this, &AFoodBase::IntermediateFunction, 15, false);
+	FTimerHandle TimerBeforeFoodDestroyed;
+	FTimerHandle TimerToStartTheFlashingTimer;
+	GetWorldTimerManager().SetTimer(TimerBeforeFoodDestroyed, this, &AFoodBase::IntermediateFunction, 15.f);
+	GetWorldTimerManager().SetTimer(TimerToStartTheFlashingTimer, this, &AFoodBase::SettingTimerToDisplayFoodInTheWorld, 10.f);
 }
 
 void AFoodBase::IntermediateFunction()
@@ -81,4 +84,19 @@ void AFoodBase::IntermediateFunction()
 		else
 			groundOwner->DestroyFoodInTheWorld(this);
 	}
+}
+
+void AFoodBase::FlashingFoodInTheGame()
+{
+	SetActorHiddenInGame(bIsSwitchHiddenInGame);
+	if (bIsSwitchHiddenInGame)
+		bIsSwitchHiddenInGame = false;
+	else
+		bIsSwitchHiddenInGame = true;
+}
+
+void AFoodBase::SettingTimerToDisplayFoodInTheWorld()
+{
+	FTimerHandle TimerToStartFlashing;
+	GetWorldTimerManager().SetTimer(TimerToStartFlashing, this, &AFoodBase::FlashingFoodInTheGame, 0.1f, true);
 }

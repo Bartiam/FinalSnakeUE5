@@ -206,8 +206,11 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 	wallsToSpawnAgainstSnake.Add(tempWallsForAdd);
 	CheckingArrayForNull();
 
-	FTimerHandle tymerDelay;
-	GetWorldTimerManager().SetTimer(tymerDelay, this, &AGroundBase::DestroyWalls, 20, false);
+	FTimerHandle timerForDestroyingWalls;
+	GetWorldTimerManager().SetTimer(timerForDestroyingWalls, this, &AGroundBase::DestroyWalls, 20.f);
+
+	for (int i = 0; i < tempWallsForAdd.Num(); ++i)
+		tempWallsForAdd[i]->SetsTimerForTheWallsAgainstTheSnake();
 }
 
 void AGroundBase::BonusFoodSpawn(const ASnakeBase* snake, const int& typeOfFood)
@@ -236,10 +239,13 @@ FVector AGroundBase::RandomPosition(const ASnakeBase* snake)
 void AGroundBase::AddingNewWallInsteadOfTheDestroyedOne()
 {
 	AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(remembersTheCoordinatesOfTheDestroyedWalls[0]));
-
+	
 	remembersTheCoordinatesOfTheDestroyedWalls.RemoveAt(0);
 
 	wallsToSpawnBeginAndDuringTheGame.Add(newWall);
+
+	if (bIsToggleToSpawnWall)
+		newWall->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AGroundBase::MakeTheSnakeTransparent()

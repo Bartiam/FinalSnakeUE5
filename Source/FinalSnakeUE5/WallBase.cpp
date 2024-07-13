@@ -12,6 +12,7 @@ AWallBase::AWallBase()
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wall"));
 	meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	bIsSwitchHiddenInGame = false;
 }
 
 // Called when the game starts or when spawned
@@ -37,3 +38,23 @@ void AWallBase::Interact(AActor* interactor, bool bIsHead)
 	}
 }
 
+void AWallBase::SetsTimerForTheWallsAgainstTheSnake()
+{
+	FTimerHandle timerToStartTheTimerForFlashing;
+	GetWorldTimerManager().SetTimer(timerToStartTheTimerForFlashing, this, &AWallBase::StartingTheTimerForFlashingTheWall, 15.f);
+}
+
+void AWallBase::FlashingWallinTheGame()
+{
+	SetActorHiddenInGame(bIsSwitchHiddenInGame);
+	if (bIsSwitchHiddenInGame)
+		bIsSwitchHiddenInGame = false;
+	else
+		bIsSwitchHiddenInGame = true;
+}
+
+void AWallBase::StartingTheTimerForFlashingTheWall()
+{
+	FTimerHandle timerForFlashing;
+	GetWorldTimerManager().SetTimer(timerForFlashing, this, &AWallBase::FlashingWallinTheGame, 0.1f);
+}

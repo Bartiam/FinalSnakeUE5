@@ -35,4 +35,13 @@ public:
 
 	virtual void Interact(AActor* interactor, bool bIsHead) override;
 
+	void SetsTimerForTheWallsAgainstTheSnake();
+
+	void StartingTheTimerForFlashingTheWall();
+
+	void FlashingWallinTheGame();
+
+private:
+
+	bool bIsSwitchHiddenInGame;
 };
