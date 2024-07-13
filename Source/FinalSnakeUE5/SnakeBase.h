@@ -38,7 +38,7 @@ public:
 	// Getters
 	EMovementDirection GetLastMoveDir() const;
 	bool GetSnakeCanMove() const;
-	const TArray<ASnakeElementBase*> GetFullSnakeElements() const;
+	TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	const FVector GetSnakeElementLocation(int index);
 	int32 GetNumbersOfSnakeElements();
 	const float GetPadding() const;

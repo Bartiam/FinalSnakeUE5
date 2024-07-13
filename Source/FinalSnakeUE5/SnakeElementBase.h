@@ -35,6 +35,10 @@ public:
 	void SetLastElementMesh();
 	void SetLastElementMesh_Implementation();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void SetSnakeMaterial();
+	void SetSnakeMaterial_Implementation();
+
 	void ToggleCollision();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

@@ -29,6 +29,9 @@ const FVector AGroundBase::GetOneSector(int index) const
 const int32 AGroundBase::GetSizeOfSectors() const
 { return worldSectors.Num(); }
 
+const bool AGroundBase::GetToggleCollisionWalls() const
+{ return bIsToggleToSpawnWall; }
+
 int32 AGroundBase::GetWorldSecotrs()
 { return worldSectors.Num(); }
 
@@ -39,6 +42,7 @@ void AGroundBase::BeginPlay()
 	SpawnWallBeginPlay();
 	DivideTheWorldIntoSectors();
 	ASnakeBase* snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
+	snake->mainWorld = this;
 	food = GetWorld()->SpawnActor<AFoodBase>(foodClasses[0], FTransform(RandomPosition(snake)));
 	food->groundOwner = this;
 	foodsInTheWorld.Add(food);
@@ -124,11 +128,13 @@ void AGroundBase::ToggleCollisionWall()
 	if (wallsToSpawnBeginAndDuringTheGame[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)
 	{
 		bIsToggleToSpawnWall = false;
+		MakeTheSnakeTransparent();
 	}
 
 	if (wallsToSpawnBeginAndDuringTheGame[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
 	{
 		bIsToggleToSpawnWall = true;
+		MakeTheSnakeTransparent();
 		GetWorldTimerManager().SetTimer(timeToWalkThroughWalls, this, &AGroundBase::ToggleCollisionWall, 5, false);
 	}
 }
@@ -234,6 +240,19 @@ void AGroundBase::AddingNewWallInsteadOfTheDestroyedOne()
 	remembersTheCoordinatesOfTheDestroyedWalls.RemoveAt(0);
 
 	wallsToSpawnBeginAndDuringTheGame.Add(newWall);
+}
+
+void AGroundBase::MakeTheSnakeTransparent()
+{
+	auto snake = Cast<ASnakeBase>(UGameplayStatics::GetActorOfClass(GetWorld(), ASnakeBase::StaticClass()));
+
+	if (!IsValid(snake))
+		return;
+
+	auto snakeELements = snake->GetFullSnakeElements();
+
+	for(int i = 0; i < snakeELements.Num(); ++i)
+		snakeELements[i]->SetSnakeMaterial();
 }
 
 bool AGroundBase::CheckWallsInTheWorld(const FVector& currentSector)

@@ -42,7 +42,7 @@ EMovementDirection ASnakeBase::GetLastMoveDir() const
 bool ASnakeBase::GetSnakeCanMove() const 
 { return bSnakeCanMove; }
 
-const TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
+TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 { return snakeElements; }
 
 const FVector ASnakeBase::GetSnakeElementLocation(int index)
@@ -88,6 +88,9 @@ void ASnakeBase::AddSnakeElements(int count)
 			newSnakeElem->SetFirstElementMesh();
 			newSnakeElem->SetFirstElementMesh_Implementation();
 		}
+		if (IsValid(mainWorld))
+			if (mainWorld->GetToggleCollisionWalls())
+				newSnakeElem->SetSnakeMaterial();
 	}
 
 	SetSnakeElementsAssets();

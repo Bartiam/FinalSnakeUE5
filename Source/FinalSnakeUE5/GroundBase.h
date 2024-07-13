@@ -24,6 +24,7 @@ public:
 	TArray<FVector> GetFullSectors() const;
 	const FVector GetOneSector(int index) const;
 	const int32 GetSizeOfSectors() const;
+	const bool GetToggleCollisionWalls() const;
 
 	// Getters for UI blueprints
 	int32 GetWorldSecotrs();
@@ -102,6 +103,8 @@ private:
 	FVector RandomPosition(const ASnakeBase* snake);
 
 	void AddingNewWallInsteadOfTheDestroyedOne();
+
+	void MakeTheSnakeTransparent();
 
 	bool CheckWallsInTheWorld(const FVector& currentSector);
 

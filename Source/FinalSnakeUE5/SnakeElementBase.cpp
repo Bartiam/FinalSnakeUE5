@@ -19,11 +19,6 @@ ASnakeElementBase::ASnakeElementBase()
 void ASnakeElementBase::SetSnakeOwner(ASnakeBase* owner)
 { this->snakeOwner = owner; }
 
-void ASnakeElementBase::SetFirstElementMesh_Implementation()
-{
-	meshComponent->OnComponentBeginOverlap.AddDynamic(this, &ASnakeElementBase::HandleBeginOverlap);
-}
-
 // Called when the game starts or when spawned
 void ASnakeElementBase::BeginPlay()
 {
@@ -56,9 +51,16 @@ void ASnakeElementBase::Interact(AActor* interactor, bool bIsHead)
 	}
 }
 
+void ASnakeElementBase::SetFirstElementMesh_Implementation()
+{
+	meshComponent->OnComponentBeginOverlap.AddDynamic(this, &ASnakeElementBase::HandleBeginOverlap);
+}
+
 void ASnakeElementBase::SetElementsMesh_Implementation() {}
 
-void ASnakeElementBase::SetLastElementMesh_Implementation(){}
+void ASnakeElementBase::SetLastElementMesh_Implementation() {}
+
+void ASnakeElementBase::SetSnakeMaterial_Implementation() {}
 
 void ASnakeElementBase::ToggleCollision()
 {
