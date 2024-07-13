@@ -83,15 +83,16 @@ private:
 
 	TArray<TArray<AWallBase*>> wallsToSpawnAgainstSnake;
 
-	TArray<AWallBase*> wallsToSpawnBeginPlay;
-
 	bool bIsToggleToSpawnWall;
 
-	// Variables for spawn wall in begin play
+	TArray<AFoodBase*> foodsInTheWorld;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Location Wall")
 	TArray<FVector> locationsOfWallToBeginPlay;
 
-	TArray<AFoodBase*> foodsInTheWorld;
+	TArray<AWallBase*> wallsToSpawnBeginAndDuringTheGame;
+
+	TArray<FVector> remembersTheCoordinatesOfTheDestroyedWalls;
 
 	// Declaring private functions
 	void DivideTheWorldIntoSectors();
@@ -99,6 +100,8 @@ private:
 	void SpawnWallBeginPlay();
 
 	FVector RandomPosition(const ASnakeBase* snake);
+
+	void AddingNewWallInsteadOfTheDestroyedOne();
 
 	bool CheckWallsInTheWorld(const FVector& currentSector);
 

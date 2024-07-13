@@ -88,7 +88,7 @@ void AGroundBase::SpawnWallBeginPlay()
 			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(locationsOfWallToBeginPlay[i]));
 		else
 			newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[0], FTransform(locationsOfWallToBeginPlay[i]));
-		wallsToSpawnBeginPlay.Add(newWall);
+		wallsToSpawnBeginAndDuringTheGame.Add(newWall);
 	}
 }
 
@@ -113,20 +113,20 @@ void AGroundBase::ToggleCollisionWall()
 		}
 	}
 
-	for (int i = 0; i < wallsToSpawnBeginPlay.Num(); ++i)
+	for (int i = 0; i < wallsToSpawnBeginAndDuringTheGame.Num(); ++i)
 	{
-		if (wallsToSpawnBeginPlay[i]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
-			wallsToSpawnBeginPlay[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		if (wallsToSpawnBeginAndDuringTheGame[i]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+			wallsToSpawnBeginAndDuringTheGame[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		else
-			wallsToSpawnBeginPlay[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			wallsToSpawnBeginAndDuringTheGame[i]->meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
-	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)
+	if (wallsToSpawnBeginAndDuringTheGame[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)
 	{
 		bIsToggleToSpawnWall = false;
 	}
 
-	if (wallsToSpawnBeginPlay[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
+	if (wallsToSpawnBeginAndDuringTheGame[0]->meshComponent->GetCollisionEnabled() == ECollisionEnabled::NoCollision)
 	{
 		bIsToggleToSpawnWall = true;
 		GetWorldTimerManager().SetTimer(timeToWalkThroughWalls, this, &AGroundBase::ToggleCollisionWall, 5, false);
@@ -227,6 +227,15 @@ FVector AGroundBase::RandomPosition(const ASnakeBase* snake)
 	return currentPosition;
 }
 
+void AGroundBase::AddingNewWallInsteadOfTheDestroyedOne()
+{
+	AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[1], FTransform(remembersTheCoordinatesOfTheDestroyedWalls[0]));
+
+	remembersTheCoordinatesOfTheDestroyedWalls.RemoveAt(0);
+
+	wallsToSpawnBeginAndDuringTheGame.Add(newWall);
+}
+
 bool AGroundBase::CheckWallsInTheWorld(const FVector& currentSector)
 {
 	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
@@ -264,9 +273,9 @@ bool AGroundBase::CheckPositionsFoodOfTheWorld(const FVector currentPosition)
 
 bool AGroundBase::CheckPositionsWallBeginPlay(const FVector& currentPosition)
 {
-	for (int i = 0; i < wallsToSpawnBeginPlay.Num(); ++i)
+	for (int i = 0; i < wallsToSpawnBeginAndDuringTheGame.Num(); ++i)
 	{
-		if (wallsToSpawnBeginPlay[i]->GetActorLocation() == currentPosition)
+		if (wallsToSpawnBeginAndDuringTheGame[i]->GetActorLocation() == currentPosition)
 			return false;
 	}
 
@@ -284,27 +293,20 @@ void AGroundBase::CheckingArrayForNull()
 
 void AGroundBase::SoftWallDestroy(AWallBase* wall)
 {
-	for (int i = 0; i < locationsOfWallToBeginPlay.Num(); ++i)
-	{
-		if (locationsOfWallToBeginPlay[i] == wall->GetActorLocation())
-		{
-			locationsOfWallToBeginPlay.RemoveAt(i);
-			break;
-		}
-	}
-
 	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
-	{
 		wallsToSpawnAgainstSnake[i].RemoveSingle(wall);
+
+	int32 IsDeleteWall = wallsToSpawnBeginAndDuringTheGame.RemoveSingle(wall);
+	
+	FTimerHandle timerHandle;
+
+	if (IsDeleteWall > 0)
+	{
+		remembersTheCoordinatesOfTheDestroyedWalls.Add(wall->GetActorLocation());
+		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &AGroundBase::AddingNewWallInsteadOfTheDestroyedOne, 30.f, false);
 	}
 
-	wallsToSpawnBeginPlay.RemoveSingle(wall);
 	wall->Destroy();
-
-	worldSectors.Empty();
-
-	DivideTheWorldIntoSectors();
-
 	CheckingArrayForNull();
 }
 
@@ -345,9 +347,9 @@ bool AGroundBase::IsThereWallInFrontOfTheSnakeHead(const ASnakeBase* snake)
 		break;
 	}
 
-	for (int i = 0; i < wallsToSpawnBeginPlay.Num(); ++i)
+	for (int i = 0; i < wallsToSpawnBeginAndDuringTheGame.Num(); ++i)
 	{
-		if (currentPosition == wallsToSpawnBeginPlay[i]->GetActorLocation())
+		if (currentPosition == wallsToSpawnBeginAndDuringTheGame[i]->GetActorLocation())
 			return false;
 	}
 
