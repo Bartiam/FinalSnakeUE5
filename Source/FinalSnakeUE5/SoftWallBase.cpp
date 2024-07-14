@@ -25,7 +25,7 @@ void ASoftWallBase::Interact(AActor* interactor, bool bIsHead)
 			if (counter > 0)
 			{
 				float foodLungeChance = FMath::RandRange(0.f, 1.f);
-				if (foodLungeChance >= 0.5f)
+				if (foodLungeChance >= 0.5f && snake->GetNumbersOfSnakeElements() <= 800)
 				{
 					foodLungeChance = FMath::RandRange(0.f, 1.f);
 					if (foodLungeChance <= 0.5f)

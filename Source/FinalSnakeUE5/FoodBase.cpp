@@ -50,7 +50,7 @@ void AFoodBase::Interact(AActor* interactor, bool bIsHead)
 
 			checkChanceForSpawnWallsAgainsSnake = FMath::RandRange(0.f, 1.f);
 
-			if (checkChanceForSpawnWallsAgainsSnake >= 0.5f)
+			if (checkChanceForSpawnWallsAgainsSnake >= 0.5f && snake->GetNumbersOfSnakeElements() <= 800)
 			{
 				groundOwner->BonusFoodSpawn(snake, (int)(EFoodsEnum::RedAppleFood));
 
