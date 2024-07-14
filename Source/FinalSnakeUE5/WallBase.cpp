@@ -12,7 +12,7 @@ AWallBase::AWallBase()
 	PrimaryActorTick.bCanEverTick = true;
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wall"));
 	meshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	bIsSwitchHiddenInGame = false;
+	bIsSwitchHiddenInGame = true;
 }
 
 // Called when the game starts or when spawned
@@ -56,5 +56,5 @@ void AWallBase::FlashingWallinTheGame()
 void AWallBase::StartingTheTimerForFlashingTheWall()
 {
 	FTimerHandle timerForFlashing;
-	GetWorldTimerManager().SetTimer(timerForFlashing, this, &AWallBase::FlashingWallinTheGame, 0.1f);
+	GetWorldTimerManager().SetTimer(timerForFlashing, this, &AWallBase::FlashingWallinTheGame, 0.1f, true);
 }

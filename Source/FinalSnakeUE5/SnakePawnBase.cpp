@@ -7,10 +7,6 @@
 
 #include "SnakeElementBase.h"
 
-#include "BonusFoodAccelerationBase.h"
-#include "BonusFoodDecelerationBase.h"
-#include "BonusFoodPassageThroughWalls.h"
-
 // Sets default values
 ASnakePawnBase::ASnakePawnBase()
 {
@@ -57,11 +53,13 @@ void ASnakePawnBase::HandleVerticalInput(float value)
 	if (IsValid(snakeActor)) {
 		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::UP && snakeActor->GetSnakeCanMove())
 		{
+			snakeActor->SetPreviousDirectionOfTravel(snakeActor->GetLastMoveDir());
 			snakeActor->SetLastMoveDir(EMovementDirection::DOWN);
 			snakeActor->SetSnakeCanMove(false);
 		}
 		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::DOWN && snakeActor->GetSnakeCanMove())
 		{
+			snakeActor->SetPreviousDirectionOfTravel(snakeActor->GetLastMoveDir());
 			snakeActor->SetLastMoveDir(EMovementDirection::UP);
 			snakeActor->SetSnakeCanMove(false);
 		}
@@ -73,11 +71,13 @@ void ASnakePawnBase::HandleHorizontalInput(float value)
 	if (IsValid(snakeActor)) {
 		if (value < 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::RIGHT && snakeActor->GetSnakeCanMove())
 		{
+			snakeActor->SetPreviousDirectionOfTravel(snakeActor->GetLastMoveDir());
 			snakeActor->SetLastMoveDir(EMovementDirection::LEFT);
 			snakeActor->SetSnakeCanMove(false);
 		}
 		else if (value > 0.f && snakeActor->GetLastMoveDir() != EMovementDirection::LEFT && snakeActor->GetSnakeCanMove())
 		{
+			snakeActor->SetPreviousDirectionOfTravel(snakeActor->GetLastMoveDir());
 			snakeActor->SetLastMoveDir(EMovementDirection::RIGHT);
 			snakeActor->SetSnakeCanMove(false);
 		}

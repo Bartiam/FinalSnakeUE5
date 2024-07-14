@@ -14,4 +14,6 @@ class FINALSNAKEUE5_API ASnakeGameModeBase : public AGameModeBase
 public:
 
 	void GameOver();
+
+	void YouWon();
 };

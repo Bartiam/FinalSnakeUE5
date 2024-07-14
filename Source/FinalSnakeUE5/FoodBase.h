@@ -14,11 +14,11 @@ class AGroundBase;
 UENUM()
 enum class EFoodsEnum
 {
-	SimpleFood = 1,
+	RedAppleFood = 1,
 	BadFood,
-	BonusFoodFromTheSoftWall,
-	BonusFoodAcceliration,
-	BonusFoodDeceleration
+	BonusPassageThroughWall,
+	BonusAccelerationSpeed,
+	BonusDecelerationSpeed
 };
 
 UCLASS()

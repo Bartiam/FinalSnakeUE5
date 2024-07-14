@@ -33,6 +33,7 @@ public:
 	void SetSnakeCanMove(bool snakeCanMove);
 	void DeleteSnakeElement();
 	void SetSkill(AFoodBase* newSkill);
+	void SetPreviousDirectionOfTravel(EMovementDirection PrevDir);
 	//////////
 	
 	// Getters
@@ -40,7 +41,7 @@ public:
 	bool GetSnakeCanMove() const;
 	TArray<ASnakeElementBase*> GetFullSnakeElements() const;
 	const FVector GetSnakeElementLocation(int index);
-	int32 GetNumbersOfSnakeElements();
+	const int32 GetNumbersOfSnakeElements() const;
 	const float GetPadding() const;
 	int32 GetScores() const;
 	AFoodBase* GetSkill() const;
@@ -73,6 +74,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Snake elements")
 	TSubclassOf<ASnakeElementBase> snakeELementClass;
+
+	bool bIsYouWon;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -105,6 +108,8 @@ private:
 
 	EMovementDirection lastMoveDir;
 
+	EMovementDirection previousDirectionOfTravel;
+
 	int32 initialSizeSnake;
 
 	bool bIsPassingThroughWall;
@@ -124,6 +129,8 @@ private:
 	void MoveSnake();
 
 	void SetSnakeElementsAssets();
+
+	void SetsTheOldDirectionOfTravel();
 
 	UPROPERTY()
 	FVector lastPosition;

@@ -187,7 +187,7 @@ void AGroundBase::SpawnWallsAgainstSnake(const ASnakeBase* snake)
 		if (newPositionOfWall.X >= minPositionX && newPositionOfWall.X <= maxPositionX &&
 			newPositionOfWall.Y >= minPositionY && newPositionOfWall.Y <= maxPositionY &&
 			IsThereFoodOrSnakeElementOnTheSpawnWall(snake, newPositionOfWall) && 
-			CheckPositionsWallBeginPlay(newPositionOfWall))
+			CheckPositionsWallBeginAndDuringTheGame(newPositionOfWall))
 		{
 										// indexOfWall == 0: WallBase; indexOfWall == 1: SoftWall; indexOfWall == 2: BonusPortal;
 			AWallBase* newWall = GetWorld()->SpawnActor<AWallBase>(wallsClasses[indexOfWall], FTransform(newPositionOfWall));
@@ -221,13 +221,50 @@ void AGroundBase::BonusFoodSpawn(const ASnakeBase* snake, const int& typeOfFood)
 	newFood->SetTimerForCurrentFood();
 }
 
+bool AGroundBase::CheckWallBesideSnake(ASnakeBase* snake)
+{
+	EMovementDirection currentDirection = snake->GetLastMoveDir();
+	FVector currentPositionOfSnakeHead = snake->GetFullSnakeElements()[0]->GetActorLocation();
+	float padding = snake->GetPadding();
+	FVector positiPossibleLocationOfTheWall(ForceInitToZero);
+
+	bool bIsThereWall = false;
+	if (currentDirection == EMovementDirection::UP)
+	{
+		positiPossibleLocationOfTheWall = FVector(currentPositionOfSnakeHead.X + padding, currentPositionOfSnakeHead.Y, currentPositionOfSnakeHead.Z);
+		bIsThereWall = CheckPositionWallsAgainstSnake(positiPossibleLocationOfTheWall);
+		bIsThereWall = !(CheckPositionsWallBeginAndDuringTheGame(positiPossibleLocationOfTheWall));
+	}
+	else if (currentDirection == EMovementDirection::DOWN)
+	{
+		positiPossibleLocationOfTheWall = FVector(currentPositionOfSnakeHead.X - padding, currentPositionOfSnakeHead.Y, currentPositionOfSnakeHead.Z);
+		bIsThereWall = CheckPositionWallsAgainstSnake(positiPossibleLocationOfTheWall);
+		bIsThereWall = !(CheckPositionsWallBeginAndDuringTheGame(positiPossibleLocationOfTheWall));
+	}
+	else if (currentDirection == EMovementDirection::LEFT)
+	{
+		positiPossibleLocationOfTheWall = FVector(currentPositionOfSnakeHead.X, currentPositionOfSnakeHead.Y - padding, currentPositionOfSnakeHead.Z);
+		bIsThereWall = CheckPositionWallsAgainstSnake(positiPossibleLocationOfTheWall);
+		bIsThereWall = !(CheckPositionsWallBeginAndDuringTheGame(positiPossibleLocationOfTheWall));
+	}
+	else if (currentDirection == EMovementDirection::RIGHT)
+	{
+		positiPossibleLocationOfTheWall = FVector(currentPositionOfSnakeHead.X, currentPositionOfSnakeHead.Y + padding, currentPositionOfSnakeHead.Z);
+		bIsThereWall = CheckPositionWallsAgainstSnake(positiPossibleLocationOfTheWall);
+		bIsThereWall = !(CheckPositionsWallBeginAndDuringTheGame(positiPossibleLocationOfTheWall));
+	}
+
+	return bIsThereWall;
+}
+
 FVector AGroundBase::RandomPosition(const ASnakeBase* snake)
 {
 	auto randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 	auto currentPosition = GetOneSector(randomIndex);
 
 	while (CheckPositionsSnakeElements(snake, currentPosition) ||
-		CheckPositionsFoodOfTheWorld(currentPosition))
+		CheckPositionsFoodOfTheWorld(currentPosition) || 
+		CheckPositionWallsAgainstSnake(currentPosition))
 	{
 		randomIndex = FMath::RandRange(0, GetSizeOfSectors() - 1);
 		currentPosition = GetOneSector(randomIndex);
@@ -285,6 +322,26 @@ bool AGroundBase::CheckPositionsSnakeElements(const ASnakeBase* snake, FVector c
 	return false;
 }
 
+bool AGroundBase::CheckPositionWallsAgainstSnake(const FVector& currentPosition)
+{
+	if (wallsToSpawnAgainstSnake.IsEmpty())
+		return false;
+
+	for (int i = 0; i < wallsToSpawnAgainstSnake.Num(); ++i)
+	{
+		if (!(wallsToSpawnAgainstSnake[i].IsEmpty()))
+		{
+			for (int j = 0; j < wallsToSpawnAgainstSnake[i].Num(); ++j)
+			{
+				if (currentPosition == wallsToSpawnAgainstSnake[i][j]->GetActorLocation())
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 bool AGroundBase::CheckPositionsFoodOfTheWorld(const FVector currentPosition)
 {
 	for (int i = 0; i < foodsInTheWorld.Num(); ++i)
@@ -296,7 +353,7 @@ bool AGroundBase::CheckPositionsFoodOfTheWorld(const FVector currentPosition)
 	return false;
 }
 
-bool AGroundBase::CheckPositionsWallBeginPlay(const FVector& currentPosition)
+bool AGroundBase::CheckPositionsWallBeginAndDuringTheGame(const FVector& currentPosition)
 {
 	for (int i = 0; i < wallsToSpawnBeginAndDuringTheGame.Num(); ++i)
 	{
@@ -328,7 +385,7 @@ void AGroundBase::SoftWallDestroy(AWallBase* wall)
 	if (IsDeleteWall > 0)
 	{
 		remembersTheCoordinatesOfTheDestroyedWalls.Add(wall->GetActorLocation());
-		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &AGroundBase::AddingNewWallInsteadOfTheDestroyedOne, 30.f, false);
+		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &AGroundBase::AddingNewWallInsteadOfTheDestroyedOne, 45.f, false);
 	}
 
 	wall->Destroy();

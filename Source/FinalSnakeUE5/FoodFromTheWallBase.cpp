@@ -14,7 +14,8 @@ void AFoodFromTheWallBase::Interact(AActor* interactor, bool bIsHead)
 		auto snake = Cast<ASnakeBase>(interactor);
 		if (IsValid(snake))
 		{
-			snake->AddSnakeElements(3);
+			int8 countNewTails = FMath::RandRange(2, 4);
+			snake->AddSnakeElements(countNewTails);
 			groundOwner->DestroyFoodInTheWorld(this);
 		}
 	}

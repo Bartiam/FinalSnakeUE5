@@ -23,3 +23,12 @@ void ASnakeHUDBase::AddNewGameOverWidget()
 
 	gameOverWidget->AddToViewport();
 }
+
+void ASnakeHUDBase::AddNewYouWonWidget()
+{
+	auto touWonWidget = CreateWidget(GetWorld(), UIYouWonClass);
+
+	GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+
+	touWonWidget->AddToViewport();
+}

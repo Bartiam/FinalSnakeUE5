@@ -65,6 +65,8 @@ public:
 
 	void BonusFoodSpawn(const ASnakeBase* snake, const int& typeOfFood);
 
+	bool CheckWallBesideSnake(ASnakeBase* snake);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -110,9 +112,11 @@ private:
 
 	bool CheckPositionsSnakeElements(const ASnakeBase* snake, const FVector currentPosition);
 
+	bool CheckPositionWallsAgainstSnake(const FVector& currentPosition);
+
 	bool CheckPositionsFoodOfTheWorld(const FVector currentPosition);
 
-	bool CheckPositionsWallBeginPlay(const FVector& currentPosition);
+	bool CheckPositionsWallBeginAndDuringTheGame(const FVector& currentPosition);
 
 	bool IsThereWallInFrontOfTheSnakeHead(const ASnakeBase* snake);
 

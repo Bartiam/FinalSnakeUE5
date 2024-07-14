@@ -6,6 +6,8 @@
 #include "GameFramework/HUD.h"
 #include "SnakeHUDBase.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class FINALSNAKEUE5_API ASnakeHUDBase : public AHUD
 {
@@ -19,13 +21,19 @@ public:
 private:
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UUserWidget> UIDuringTheGameClass;
+	TSubclassOf<UUserWidget> UIDuringTheGameClass;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UUserWidget> UIGameOverClass;
+	TSubclassOf<UUserWidget> UIGameOverClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> UIYouWonClass;
 
 public:
 
 	UFUNCTION()
 	void AddNewGameOverWidget();
+
+	UFUNCTION()
+	void AddNewYouWonWidget();
 };

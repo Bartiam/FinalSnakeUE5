@@ -20,6 +20,7 @@ ASnakeBase::ASnakeBase()
 	bSnakeCanMove = true;
 	initialSizeSnake = 4;
 	scores = 0;
+	bIsYouWon = false;
 }
 
 // Setters
@@ -35,6 +36,9 @@ void ASnakeBase::SetSkill(AFoodBase* newSkill)
 		skill = newSkill;
 }
 
+void ASnakeBase::SetPreviousDirectionOfTravel(EMovementDirection PrevDir)
+{ previousDirectionOfTravel = PrevDir; }
+
 // Getters
 EMovementDirection ASnakeBase::GetLastMoveDir() const
 { return lastMoveDir; }
@@ -48,7 +52,7 @@ TArray<ASnakeElementBase*> ASnakeBase::GetFullSnakeElements() const
 const FVector ASnakeBase::GetSnakeElementLocation(int index)
 { return snakeElements[index]->GetActorLocation(); }
 
-int32 ASnakeBase::GetNumbersOfSnakeElements()
+const int32 ASnakeBase::GetNumbersOfSnakeElements() const
 { return snakeElements.Num(); }
 
 const float ASnakeBase::GetPadding() const
@@ -98,6 +102,13 @@ void ASnakeBase::AddSnakeElements(int count)
 	TimeToStarveToDeath();
 
 	scores += count;
+
+	if (IsValid(mainWorld))
+		if (scores >= mainWorld->GetSizeOfSectors())
+		{
+			auto gameMode = Cast<ASnakeGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+			gameMode->YouWon();
+		}
 }
 
 void ASnakeBase::StepBack()
@@ -117,6 +128,8 @@ void ASnakeBase::StepBack()
 	snakeElements[snakeElements.Num() - 2]->SetActorRotation(lastElemRotation);
 
 	snakeElements[0]->ToggleCollision();
+
+	SetsTheOldDirectionOfTravel();
 }
 
 void ASnakeBase::teleportSnake()
@@ -162,6 +175,9 @@ void ASnakeBase::CancellationBonus()
 
 void ASnakeBase::MoveSnake()
 {
+	if (bIsYouWon)
+		return;
+
 	bSnakeCanMove = true;
 
 	FVector movementVector(ForceInitToZero);
@@ -215,6 +231,29 @@ void ASnakeBase::SetSnakeElementsAssets()
 	snakeElements[snakeElements.Num() - 1]->SetLastElementMesh();
 }
 
+void ASnakeBase::SetsTheOldDirectionOfTravel()
+{
+	switch (lastMoveDir)
+	{
+	case EMovementDirection::UP:
+		if (mainWorld->CheckWallBesideSnake(this))
+			lastMoveDir = previousDirectionOfTravel;
+		break;
+	case EMovementDirection::DOWN:
+		if (mainWorld->CheckWallBesideSnake(this))
+			lastMoveDir = previousDirectionOfTravel;
+		break;
+	case EMovementDirection::LEFT:
+		if (mainWorld->CheckWallBesideSnake(this))
+			lastMoveDir = previousDirectionOfTravel;
+		break;
+	case EMovementDirection::RIGHT:
+		if (mainWorld->CheckWallBesideSnake(this))
+			lastMoveDir = previousDirectionOfTravel;
+		break;
+	}
+}
+
 FRotator ASnakeBase::RotationNewElement()
 {
 	FRotator result;
@@ -234,9 +273,7 @@ FVector ASnakeBase::LocationNewElement()
 	FVector penultimateElement;
 
 	if (GetNumbersOfSnakeElements() == 0)
-	{
 		result = FVector(GetNumbersOfSnakeElements() * padding + 30.f, 30.f, 30.f);
-	}
 	else
 	{
 		locationLastElement = snakeElements[GetNumbersOfSnakeElements() - 1]->GetActorLocation();
